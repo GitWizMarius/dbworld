@@ -45,7 +45,7 @@ def get_top_n_keywords(n):
     print('Placeholder')
 
 
-def k_means(vec, df):
+def k_means(vec, df, name):
     # initialize KMeans with 4 clusters
     kmeans = KMeans(n_clusters=4, random_state=42)
     kmeans.fit(vec)
@@ -69,7 +69,7 @@ def k_means(vec, df):
     # set image size
     plt.figure(figsize=(12, 7))
     # set title
-    plt.title("TF-IDF + KMeans", fontdict={"fontsize": 18})
+    plt.title("TF-IDF and KMeans using Mail-{}".format(name), fontdict={"fontsize": 18})
     # set axes names
     plt.xlabel("X0", fontdict={"fontsize": 16})
     plt.ylabel("X1", fontdict={"fontsize": 16})
@@ -82,32 +82,37 @@ def k_means(vec, df):
 def main():
     # Import DataSet and preprocess
     dataset = process.import_data()
-    print(dataset.dtypes)
+
+    # initialize TF-IDF Vectorizer
+    vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, max_df=0.95)
 
     # Cluster with Only Subject
     df_subject = pd.DataFrame(data=dataset['Subject'], columns=['Subject'])
     df_subject['clean'] = df_subject['Subject'].apply(lambda x: preprocess(x, r_stopwords=True))
-    # initialize TF-IDF Vectorizer
-    vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, max_df=0.95)
     # fit_transform is used to apply TF-IDF to our cleaned Text, then the Vector of arrays gets saved in vec
     vec = vectorizer.fit_transform(df_subject['clean'])
     # Call k_means Function with Vector and DataFrame
-    k_means(vec, df_subject)
+    k_means(vec, df_subject, 'Subject')
 
     # Cluster with Only Body
     df_body = pd.DataFrame(data=dataset['Body'], columns=['Body'])
     df_body['clean'] = df_body['Body'].apply(lambda x: preprocess(x, r_stopwords=True))
     # initialize TF-IDF Vectorizer
-    vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, max_df=0.95)
+    #vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, max_df=0.95)
     # fit_transform is used to apply TF-IDF to our cleaned Text, then the Vector of arrays gets saved in vec
-    vec = vectorizer.fit_transform(df_subject['clean'])
+    vec = vectorizer.fit_transform(df_body['clean'])
     # Call k_means Function with Vector and DataFrame
-    k_means(vec, df_body)
+    k_means(vec, df_body, 'Body')
 
     # Cluster with Subject and Body
 
+
+
+
+
     print("Press any key to exit...")
     junk = getch()
+    return 0
 
 if __name__ == "__main__":
     main()
