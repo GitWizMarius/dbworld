@@ -1,3 +1,11 @@
+# Kommentar von Marius
+"""
+Dies Clustering basiert auf TF-IDF in Kombination mit KMeans -> siehe ggf. Theoriebereich der Studienarbeit.
+Anzumerken ist, dass die Cluster nicht eindeutig sein werden, da bspw. ein Call for Paper von den "Keywords"
+ähnlich sein kann wie ein anderer Bereich.
+"""
+# ===================
+
 import pandas as pd
 from msvcrt import getch
 # import sklearn library's
