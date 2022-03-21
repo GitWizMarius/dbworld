@@ -3,11 +3,13 @@
 Dies Clustering basiert auf TF-IDF in Kombination mit KMeans -> siehe ggf. Theoriebereich der Studienarbeit.
 Anzumerken ist, dass die Cluster nicht eindeutig sein werden, da bspw. ein Call for Paper von den "Keywords"
 ähnlich sein kann wie ein anderer Bereich.
+Link: https://medium.com/mlearning-ai/text-clustering-with-tf-idf-in-python-c94cd26a31e7
 """
 # ===================
-
+import numpy as np
 import pandas as pd
 from msvcrt import getch
+
 # import sklearn library's
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -49,13 +51,18 @@ def preprocess(text: str, r_stopwords: bool) -> str:
     return text
 
 
-def get_top_n_keywords(n):
-    print('Placeholder')
+def get_top_n_keywords(n, vec, vectorizer, clusters):
+    df = pd.DataFrame(vec.todense()).groupby(clusters).mean()  # groups tf idf vector per cluster
+    terms = vectorizer.get_feature_names_out()  # access to tf idf terms
+    for i, r in df.iterrows():
+        print('\nCluster {}'.format(i))
+        print(','.join([terms[t] for t in np.argsort(r)[-n:]]))
 
 
-def k_means(vec, df, name):
+# for each row of the dataframe, find the n terms that have the highest tf idf score
+def k_means(vec, df, name, vectorizer):
     # initialize KMeans with 4 clusters
-    kmeans = KMeans(n_clusters=4, random_state=42)
+    kmeans = KMeans(n_clusters=3, random_state=42)
     kmeans.fit(vec)
     clusters = kmeans.labels_
     # initialize PCA with 2 components
@@ -65,6 +72,8 @@ def k_means(vec, df, name):
     # save the two dimensions in x0 and x1
     x0 = pca_vecs[:, 0]
     x1 = pca_vecs[:, 1]
+
+    get_top_n_keywords(20, vec, vectorizer, clusters)
 
     # assign clusters and PCA vectors to columns in the original dataframe
     df['cluster'] = clusters
@@ -100,27 +109,24 @@ def main():
     # fit_transform is used to apply TF-IDF to our cleaned Text, then the Vector of arrays gets saved in vec
     vec = vectorizer.fit_transform(df_subject['clean'])
     # Call k_means Function with Vector and DataFrame
-    k_means(vec, df_subject, 'Subject')
+    k_means(vec, df_subject, 'Subject', vectorizer)
 
     # Cluster with Only Body
     df_body = pd.DataFrame(data=dataset['Body'], columns=['Body'])
     df_body['clean'] = df_body['Body'].apply(lambda x: preprocess(x, r_stopwords=True))
     # initialize TF-IDF Vectorizer
-    #vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, max_df=0.95)
+    # vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, max_df=0.95)
     # fit_transform is used to apply TF-IDF to our cleaned Text, then the Vector of arrays gets saved in vec
     vec = vectorizer.fit_transform(df_body['clean'])
     # Call k_means Function with Vector and DataFrame
-    k_means(vec, df_body, 'Body')
+    k_means(vec, df_body, 'Body', vectorizer)
 
     # Cluster with Subject and Body
-
-
-
-
 
     print("Press any key to exit...")
     junk = getch()
     return 0
+
 
 if __name__ == "__main__":
     main()
