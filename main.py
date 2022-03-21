@@ -8,7 +8,7 @@ from tqdm import tqdm
 import db
 import preprocess
 
-
+#TODO: Complete Rework of Main and other Parts
 def main():
     # Import DataSet and preprocess
     dataset = preprocess.import_data()
