@@ -43,8 +43,8 @@ def main():
     print(DataSet.dtypes)
     print(Base_Text[:n])
 
-    Text_Clean = Base_Text.apply(lambda x: process.preprocess(x, r_stopwords=True))
-    print(Text_Clean[:n])
+    '''Text_Clean = Base_Text[:n].apply(lambda x: process.preprocess(x, r_stopwords=True))
+    print(Text_Clean)'''
 
     results = keyword_algorithms.benchmark(Base_Text[:n], shuffle=True)
 

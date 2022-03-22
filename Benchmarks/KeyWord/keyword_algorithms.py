@@ -241,7 +241,7 @@ def benchmark(corpus, shuffle=True):
     for extractor in extractors:
         result = extract_keywords_from_corpus(extractor, corpus)
         results.append(result)
-        print(result)
+    print(results)
 
     # compute average number of extracted keywords
     for result in results:
