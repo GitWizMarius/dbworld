@@ -119,7 +119,7 @@ def main():
 
     # Cluster with Subject and Body
     df_both = pd.DataFrame(dataset['Subject']+dataset['Body'], columns=['Both'])
-    df_both['clean'] = df_both['Body'].apply(lambda x: preprocess(x, r_stopwords=True))
+    df_both['clean'] = df_both['Both'].apply(lambda x: preprocess(x, r_stopwords=True))
     # fit_transform is used to apply TF-IDF to our cleaned Text, then the Vector of arrays gets saved in vec
     vec = vectorizer.fit_transform(df_both['clean'])
     # Call k_means Function with Vector and DataFrame
