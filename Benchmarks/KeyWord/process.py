@@ -3,7 +3,12 @@
 from tkinter import Tk  # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
 import re
+
+import nltk
 import pandas as pd
+
+from nltk.corpus import stopwords
+
 
 # Import the DataSet with correct encoding and Rename Columns
 def import_data():
@@ -31,3 +36,21 @@ def import_data():
     finally:
         print(".CSV Import was successfully")
     return df, base_text
+
+
+def preprocess(text: str, r_stopwords: bool) -> str:
+    # remove links from text
+    text = re.sub(r"http\S+", "", text)
+    # remove numbers and special characters from text
+    text = re.sub("[^A-Za-z]+", " ", text)
+    # remove stopwords
+    if r_stopwords:
+        # 1. creates tokens
+        tokens = nltk.word_tokenize(text)
+        # 2. checks if token is a stopword and removes it
+        tokens = [w for w in tokens if not w.lower() in stopwords.words("english")]
+        # 3. joins all tokens again
+        text = " ".join(tokens)
+    # returns cleaned text
+    text = text.lower().strip()
+    return text

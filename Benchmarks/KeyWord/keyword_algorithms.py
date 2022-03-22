@@ -11,9 +11,11 @@ from rake_nltk import Rake
 import yake
 import pke
 from keybert import KeyBERT
-import spacy
 
+import spacy
+#IF this throws an Error, run: python -m spacy download en_core_web_sm
 nlp = spacy.load('en_core_web_sm')
+
 import pandas as pd
 import matplotlib
 
