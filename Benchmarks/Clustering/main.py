@@ -51,14 +51,6 @@ def preprocess(text: str, r_stopwords: bool) -> str:
     return text
 
 
-def get_top_n_keywords(n, vec, vectorizer, clusters):
-    df = pd.DataFrame(vec.todense()).groupby(clusters).mean()  # groups tf idf vector per cluster
-    terms = vectorizer.get_feature_names_out()  # access to tf idf terms
-    for i, r in df.iterrows():
-        print('\nCluster {}'.format(i))
-        print(','.join([terms[t] for t in np.argsort(r)[-n:]]))
-
-
 # for each row of the dataframe, find the n terms that have the highest tf idf score
 def k_means(vec, df, name, vectorizer):
     # initialize KMeans with 4 clusters
@@ -73,7 +65,13 @@ def k_means(vec, df, name, vectorizer):
     x0 = pca_vecs[:, 0]
     x1 = pca_vecs[:, 1]
 
-    get_top_n_keywords(20, vec, vectorizer, clusters)
+    # get top N Keywords from each Cluster
+    n = 20
+    df_key = pd.DataFrame(vec.todense()).groupby(clusters).mean()  # groups tf idf vector per cluster
+    terms = vectorizer.get_feature_names_out()  # access to tf idf terms
+    for i, r in df_key.iterrows():
+        print('\nCluster {}'.format(i))
+        print(','.join([terms[t] for t in np.argsort(r)[-n:]]))
 
     # assign clusters and PCA vectors to columns in the original dataframe
     df['cluster'] = clusters
@@ -114,14 +112,18 @@ def main():
     # Cluster with Only Body
     df_body = pd.DataFrame(data=dataset['Body'], columns=['Body'])
     df_body['clean'] = df_body['Body'].apply(lambda x: preprocess(x, r_stopwords=True))
-    # initialize TF-IDF Vectorizer
-    # vectorizer = TfidfVectorizer(sublinear_tf=True, min_df=5, max_df=0.95)
     # fit_transform is used to apply TF-IDF to our cleaned Text, then the Vector of arrays gets saved in vec
     vec = vectorizer.fit_transform(df_body['clean'])
     # Call k_means Function with Vector and DataFrame
     k_means(vec, df_body, 'Body', vectorizer)
 
     # Cluster with Subject and Body
+    df_both = pd.DataFrame(dataset['Subject']+dataset['Body'], columns=['Both'])
+    df_both['clean'] = df_both['Body'].apply(lambda x: preprocess(x, r_stopwords=True))
+    # fit_transform is used to apply TF-IDF to our cleaned Text, then the Vector of arrays gets saved in vec
+    vec = vectorizer.fit_transform(df_both['clean'])
+    # Call k_means Function with Vector and DataFrame
+    k_means(vec, df_both, 'Both', vectorizer)
 
     print("Press any key to exit...")
     junk = getch()
