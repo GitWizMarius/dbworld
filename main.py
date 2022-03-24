@@ -8,7 +8,50 @@ from tqdm import tqdm
 import db
 import preprocess
 
-#TODO: Complete Rework of Main and other Parts
+
+
+def main():
+    # Settings
+    # To Control what you want to do
+    keyword = True
+    classification = False
+    # Write Results to Database, Save Local as csv or Both
+    database = False
+    csv = True
+
+    # Import DataSet and preprocess
+    # Todo: Rework Import_Data
+    dataset = preprocess.import_data()
+    print(dataset.dtypes)
+
+    # Process for each Mail is exactly the same
+    for i in tqdm(range(len(dataset))):
+        # Todo: Complete Process (Keyword Extraction, Classification, ...)
+        # For Each Step we use the Base DataSet after it was Imported
+        # Data Cleansing is done separate for each step
+        if keyword:
+            print('Keyword Extraction')
+
+        if classification:
+            print('Mail Classification')
+
+        # Todo: Write all to DataBase after element was processed
+        if database:
+            print('Write to Database')
+
+        if csv:
+            print('Write to .csv')
+
+        print('Just Some')
+
+    print("Done")
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()
+
+
+'''#TODO: Complete Rework of Main and other Parts
 def main():
     # Import DataSet and preprocess
     dataset = preprocess.import_data()
@@ -41,9 +84,4 @@ def main():
         db.insert_singlekeyword(single_keywords, mail_id)
         db.insert_multiplekeyword(multiple_keywords, mail_id)
 
-    print("Done")
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    main()
+    print("Done")'''
