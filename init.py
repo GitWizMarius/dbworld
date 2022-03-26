@@ -2,9 +2,7 @@
 # This .py-File is used to Import the DataSet and preprocess it for general usage
 #
 import easygui
-import re
 import pandas as pd
-from keybert import KeyBERT
 
 
 # Preprocess of the DataSet
