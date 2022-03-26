@@ -9,19 +9,21 @@ import db
 import preprocess
 
 
-
 def main():
     # Settings
     # To Control what you want to do
     keyword = True
     classification = False
     # Write Results to Database, Save Local as csv or Both
-    database = False
     csv = True
+    database = True
+    if database:
+        db.connect()
 
     # Import DataSet and preprocess
-    # Todo: Rework Import_Data
+    # Todo: Rework Import_Data -> preprocess.py will be init.py in new Version
     dataset = preprocess.import_data()
+    print('DataSet imported with following DataTypes:')
     print(dataset.dtypes)
 
     # Process for each Mail is exactly the same
@@ -36,20 +38,23 @@ def main():
             print('Mail Classification')
 
         # Todo: Write all to DataBase after element was processed
+        # Todo: Implement all needed Functions
         if database:
             print('Write to Database')
 
+        # Todo: Implement .csv Export for all (Maybe as JSON Format?)
         if csv:
             print('Write to .csv')
 
         print('Just Some')
 
+    db.disconnect()
     print("Done")
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
-
 
 '''#TODO: Complete Rework of Main and other Parts
 def main():
