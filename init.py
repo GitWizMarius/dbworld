@@ -1,9 +1,10 @@
 #
 # This .py-File is used to Import the DataSet and preprocess it for general usage
 #
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
+import easygui
+import re
 import pandas as pd
+from keybert import KeyBERT
 
 
 # Preprocess of the DataSet
@@ -22,9 +23,9 @@ def preprocess(df):
 
 
 def import_data():
-    # Select .csv-File which you want to Import
-    Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
-    filepath = askopenfilename()  # show an "Open" dialog box and return the path to the selected file
+    # Select Filepath from DataSet
+    # Todo: Add Error Handling for Import
+    filepath = easygui.fileopenbox()
     try:
         # File Import with ISO-8859-1 encoding -> UTF-8 is throwing a Error
         df = pd.read_csv(filepath, encoding='ISO-8859-1', parse_dates=True)

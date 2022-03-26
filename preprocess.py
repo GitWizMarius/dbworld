@@ -1,7 +1,7 @@
 # Imports
 # Graphical Import
-from tkinter import Tk  # from tkinter import Tk for Python 3.x
-from tkinter.filedialog import askopenfilename
+import easygui
+
 import re
 import pandas as pd
 from keybert import KeyBERT
@@ -15,8 +15,8 @@ kw_model = KeyBERT(model='all-mpnet-base-v2')
 # Import the DataSet with correct encoding and Rename Columns
 def import_data():
     # Select Filepath from DataSet
-    Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
-    filepath = askopenfilename()  # show an "Open" dialog box and return the path to the selected file
+    # Todo: Add Error Handling for Import
+    filepath = easygui.fileopenbox()
     try:
         # File Import with UTF8 encoding throws an Error
         df = pd.read_csv(filepath, encoding='ISO-8859-1', parse_dates=True)
