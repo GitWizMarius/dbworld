@@ -7,12 +7,14 @@ from tqdm import tqdm
 # Import own .py files
 import db
 import init
+import kword
 
 
 def main():
     # Settings
     # To Control what you want to do
-    keyword = True
+    keywords = True
+    lemmatize = True
     classification = False
     # Write Results to Database, Save Local as csv or Both
     csv = False
@@ -20,18 +22,28 @@ def main():
     if database:
         db.connect()
 
+    # Other Variables
+    Single_Keywords = None
+    Multiple_Keywords = None
+
     # Import DataSet and preprocess
     dataset = init.import_data()
     print('DataSet imported with following DataTypes:')
     print(dataset.dtypes)
+    print('========================================================')
 
     # Process for each Mail is exactly the same
     for i in tqdm(range(len(dataset))):
         # Todo: Complete Process (Keyword Extraction, Classification, ...)
         # For Each Step we use the Base DataSet after it was Imported
         # Data Cleansing is done separate for each step
-        if keyword:
-            print('Keyword Extraction')
+        if keywords:
+            keyword_text = dataset.loc[i, "Subject"] + '. ' + dataset.loc[i, "Body"]
+            single, multiple = kword.extract_all(keyword_text, lemmatize)
+
+            print(single)
+            print(multiple)
+            print('========================================================')
 
         if classification:
             print('Mail Classification')
