@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 # Import own .py files
 import db
-import preprocess
+import init
 
 
 def main():
@@ -15,14 +15,13 @@ def main():
     keyword = True
     classification = False
     # Write Results to Database, Save Local as csv or Both
-    csv = True
-    database = True
+    csv = False
+    database = False
     if database:
         db.connect()
 
     # Import DataSet and preprocess
-    # Todo: Rework Import_Data -> preprocess.py will be init.py in new Version
-    dataset = preprocess.import_data()
+    dataset = init.import_data()
     print('DataSet imported with following DataTypes:')
     print(dataset.dtypes)
 
@@ -48,7 +47,8 @@ def main():
 
         print('Just Some')
 
-    db.disconnect()
+    if database:
+        db.disconnect()
     print("Done")
 
 
