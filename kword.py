@@ -20,11 +20,9 @@ def preprocess(text: str, lemmatize: bool) -> str:
     text = re.sub(r"http\S+", "", text)
     # remove numbers and special characters from text
     text = re.sub("[^A-Za-z]+", " ", text)
-
     # make all words lowercase
     text = text.lower().strip()
 
-    # Todo: Lemmatize throws Cuda Error but works (Fix?) -> Only if trf model is used (has better results)
     # Lemmatize before so you dont get both: "(economic', 0.307), ('economics', 0.302)"
     # Todo: Check Keyword Results after Lemmatize -> especially Multiple Keyword!
     if lemmatize:

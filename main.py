@@ -40,7 +40,6 @@ def main():
         if keywords:
             keyword_text = dataset.loc[i, "Subject"] + '. ' + dataset.loc[i, "Body"]
             single, multiple = kword.extract_all(keyword_text, lemmatize)
-
             print(single)
             print(multiple)
             print('========================================================')
@@ -55,6 +54,7 @@ def main():
 
         # Todo: Implement .csv Export for all (Maybe as JSON Format?)
         if csv:
+            # Save in .json Format or somethin else
             print('Write to .csv')
 
         print('Just Some')
