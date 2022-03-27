@@ -60,7 +60,7 @@ def old_insert_allmails(df):
         print(df.loc[i, "Subject"] + " was written to the DB")
 
 
-def old_insert_mail(date_received, from_name, from_mail, subject, body):
+def insert_mail(date_received, from_name, from_mail, subject, body):
     """print("Insert Single Mail")"""
     query = "INSERT INTO maildatasettable (date_received, from_name, from_mail, subject, body) values(%s,%s,%s,%s,%s) RETURNING id;"
 
@@ -78,7 +78,7 @@ def old_insert_mail(date_received, from_name, from_mail, subject, body):
     return id_of_new_row + 1
 
 
-def old_insert_singlekeyword(keywords, mail_id):
+def insert_singlekeyword(keywords, mail_id):
     """print("Insert Keywords to ID: ", mail_id)"""
     query = "INSERT INTO keywordssingle(id, keyword) values(%s, %s)"
 
@@ -95,7 +95,7 @@ def old_insert_singlekeyword(keywords, mail_id):
             return 1
 
 
-def old_insert_multiplekeyword(keywords, mail_id):
+def insert_multiplekeyword(keywords, mail_id):
     """print("Insert Keywords to ID: ", mail_id)"""
     query = "INSERT INTO keywordsmultiple(id, keyword) values(%s, %s)"
     for index, tuple in enumerate(keywords):

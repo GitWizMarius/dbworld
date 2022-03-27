@@ -21,7 +21,7 @@ def main():
 
     # Export-Settings ====
     js = False             # Export as json (True/False)
-    database = False        # Export/Write to Database (True/False)
+    database = True        # Export/Write to Database (True/False)
     if database:
         db.connect()
 
@@ -70,12 +70,12 @@ def main():
                     break
             # Write Keywords to DB
             if keywords:
-                db.insert_singlekeyword(single_keywords, mail_id)
-                db.insert_multiplekeyword(multiple_keywords, mail_id)
+                db.insert_singlekeyword(single, mail_id)
+                db.insert_multiplekeyword(multiple, mail_id)
             # Write Classification to DB
             if classification:
                 print('Write to Database')
-            print('Write to Database')
+
 
         # Todo: Implement JSON Export containing all values
         # -> Late Project Stage if Time
@@ -83,7 +83,7 @@ def main():
             # Save in .json Format or somethin else
             print('Write to .csv')
 
-        print('Just Some')
+
 
     if database:
         db.disconnect()
