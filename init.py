@@ -16,7 +16,6 @@ def preprocess(df):
     df['Date_Received'] = pd.to_datetime(df['Date_Received'], dayfirst=True)
     df = df.sort_values(by='Date_Received', ascending=False)
     df = df.reset_index(drop=True)
-    # Todo: Remove all [dbworld] from Subject if there is one
 
     df = df.fillna("Ops, something seems to be wrong here.")
     return df

@@ -21,9 +21,9 @@ def preprocess(text: str, lemmatize: bool) -> str:
     text = re.sub("[^A-Za-z]+", " ", text)
     # make all words lowercase
     text = text.lower().strip()
-
-    # Todo: remove "dbworld"
-
+    # Replace some generic DBWorld Words :)
+    text = text.replace('dbworld', '')
+    text = text.replace('sigmod', '')
     # Lemmatize before so you dont get both: "(economic', 0.307), ('economics', 0.302)"
     # Todo: Check Keyword Results after Lemmatize -> especially Multiple Keyword!
     # Todo: Maybe use Multiple_Keywords without Lemmatize
