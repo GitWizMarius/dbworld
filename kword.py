@@ -24,9 +24,9 @@ def preprocess(text: str, lemmatize: bool) -> str:
     # Replace some generic DBWorld Words :)
     text = text.replace('dbworld', '')
     text = text.replace('sigmod', '')
+
     # Lemmatize before so you dont get both: "(economic', 0.307), ('economics', 0.302)"
     # Todo: Check Keyword Results after Lemmatize -> especially Multiple Keyword!
-    # Todo: Maybe use Multiple_Keywords without Lemmatize
     if lemmatize:
         doc = lem_model(text)
         # token._.lemma() -> uses lemminflect (pip install lemminflect): better results (example: data will not/less be transformed to datum)
@@ -40,7 +40,14 @@ def extract_all(text: str, lemmatize: bool, top_n: int):
     # Info: Currently MultipleKeywords standard without Lemmatize
     singletext, multipletext = preprocess(text, lemmatize)
 
+    # Return the Number of Words per Mail after cleaning from Links, Numbers and Special Character
+    word_list = multipletext.split()
+    number_of_words = len(word_list)
+
+    # Extraction with KeyBERT -> https://github.com/MaartenGr/KeyBERT
+    # Not as fast as Rake but better matches/results
+    # If there are Multiple Mentions of the exact same Keyword it onyl returns one of them
     single = kw_model.extract_keywords(singletext, keyphrase_ngram_range=(1, 1), stop_words='english', top_n=top_n)
     multiple = kw_model.extract_keywords(multipletext, keyphrase_ngram_range=(2, 3), stop_words='english', top_n=top_n)
 
-    return single, multiple
+    return single, multiple, number_of_words

@@ -12,19 +12,18 @@ import kword
 
 def main():
     # Keywords-Settings ====
-    keywords = True         # Extract Keywords (True/False)
-    top_n_keywords = 20     # Set how many Top Keywords to extract from each text
-    lemmatize = True        # Lemmatize Single Keywords (True/False)
+    keywords = True  # Extract Keywords (True/False)
+    top_n_keywords = 20  # Set how many Top Keywords to extract from each text
+    lemmatize = True  # Lemmatize Single Keywords (True/False)
 
     # Classification-Settings ====
     classification = False  # Classification of Mails (True/False)
 
     # Export-Settings ====
-    js = False             # Export as json (True/False)
-    database = True        # Export/Write to Database (True/False)
+    js = False  # Export as json (True/False)
+    database = True  # Export/Write to Database (True/False)
     if database:
         db.connect()
-
 
     # Other Variables
     single_keywords = None
@@ -44,10 +43,10 @@ def main():
         # Data Cleansing is done separate for each step (Currently only single Keywords with Lemmatize)
         if keywords:
             keyword_text = dataset.loc[i, "Subject"] + '. ' + dataset.loc[i, "Body"]
-            single, multiple = kword.extract_all(keyword_text, lemmatize, top_n_keywords)
-            #print(single)
-            #print(multiple)
-            #print('========================================================')
+            single, multiple, number_of_words = kword.extract_all(keyword_text, lemmatize, top_n_keywords)
+            # print(single)
+            # print(multiple)
+            # print('========================================================')
 
         if classification:
             print('Mail Classification /tbd')
@@ -61,7 +60,7 @@ def main():
             while True:
                 mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], dataset.loc[i, "From_Name"],
                                          dataset.loc[i, "From_Mail"],
-                                         dataset.loc[i, "Subject"], dataset.loc[i, "Body"])
+                                         dataset.loc[i, "Subject"], dataset.loc[i, "Body"], number_of_words)
                 mail_id -= 1
                 if mail_id == 0:
                     print('Mail ID is ZERO')
@@ -76,14 +75,11 @@ def main():
             if classification:
                 print('Write to Database')
 
-
         # Todo: Implement JSON Export containing all values
         # -> Late Project Stage if Time
         if js:
             # Save in .json Format or somethin else
             print('Write to .csv')
-
-
 
     if database:
         db.disconnect()
