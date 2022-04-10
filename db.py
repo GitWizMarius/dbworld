@@ -113,7 +113,7 @@ def insert_multiplekeyword(keywords, mail_id, doubled):
 
 def check_double(text):
     # Todo: Currently only simple check -> try complex one with PostgreSQL (currently not working idk why)
-    query = "SELECT EXISTS(SELECT 1 FROM maildatasettable WHERE subject = {})".format(text)
+    query = "SELECT EXISTS(SELECT 1 FROM maildatasettable WHERE subject = '{}')".format(text)
     try:
         cur.execute(query)
         conn.commit()

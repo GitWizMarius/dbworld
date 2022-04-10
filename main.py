@@ -55,7 +55,7 @@ def main():
         # Todo: Implement all needed Functions
         if database:
             # Todo: Doubled Check -> Check if there is a similar mail (If yes -> mark Keywords as doubled)
-            doubled = db.check_doubled(dataset.loc[i, "Subject"])
+            doubled = db.check_double(dataset.loc[i, "Subject"])
             # Write Mail to DB
             while True:
                 mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], dataset.loc[i, "From_Name"],
