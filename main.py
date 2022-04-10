@@ -55,7 +55,7 @@ def main():
         # Todo: Implement all needed Functions
         if database:
             # Todo: Doubled Check -> Check if there is a similar mail (If yes -> mark Keywords as doubled)
-
+            doubled = db.check_doubled(dataset.loc[i, "Subject"])
             # Write Mail to DB
             while True:
                 mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], dataset.loc[i, "From_Name"],
@@ -69,8 +69,8 @@ def main():
                     break
             # Write Keywords to DB
             if keywords:
-                db.insert_singlekeyword(single, mail_id)
-                db.insert_multiplekeyword(multiple, mail_id)
+                db.insert_singlekeyword(single, mail_id, doubled)
+                db.insert_multiplekeyword(multiple, mail_id, doubled)
             # Write Classification to DB
             if classification:
                 print('Write to Database')

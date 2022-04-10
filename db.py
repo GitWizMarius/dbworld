@@ -78,15 +78,15 @@ def insert_mail(date_received, from_name, from_mail, subject, body, wordcount):
     return id_of_new_row + 1
 
 
-def insert_singlekeyword(keywords, mail_id):
+def insert_singlekeyword(keywords, mail_id, doubled):
     """print("Insert Keywords to ID: ", mail_id)"""
-    query = "INSERT INTO keywordssingle(id, keyword) values(%s, %s)"
+    query = "INSERT INTO keywordssingle(id, keyword, doubled) values(%s, %s, %s)"
 
     for index, tuple in enumerate(keywords):
         """ Execute a single INSERT request """
         '''print('Insert Keyword:'+ tuple[0])'''
         try:
-            cur.execute(query, (mail_id, tuple[0]))
+            cur.execute(query, (mail_id, tuple[0], doubled))
             conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error: %s" % error)
@@ -95,20 +95,36 @@ def insert_singlekeyword(keywords, mail_id):
             return 1
 
 
-def insert_multiplekeyword(keywords, mail_id):
+def insert_multiplekeyword(keywords, mail_id, doubled):
     """print("Insert Keywords to ID: ", mail_id)"""
-    query = "INSERT INTO keywordsmultiple(id, keyword) values(%s, %s)"
+    query = "INSERT INTO keywordsmultiple(id, keyword, doubled) values(%s, %s, %s)"
     for index, tuple in enumerate(keywords):
         """ Execute a single INSERT request """
         '''print('Insert Keyword:'+tuple[0])'''
         try:
-            cur.execute(query, (mail_id, tuple[0]))
+            cur.execute(query, (mail_id, tuple[0], doubled))
             conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error: %s" % error)
             conn.rollback()
             cur.close()
             return 1
+
+
+def check_double(text):
+    # Todo: Currently only simple check -> try complex one with PostgreSQL (currently not working idk why)
+    query = "SELECT EXISTS(SELECT 1 FROM maildatasettable WHERE subject = {})".format(text)
+    try:
+        cur.execute(query)
+        conn.commit()
+        exists = cur.fetchone()[0]
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        conn.rollback()
+        cur.close()
+        return 1
+
+    return exists
 
 
 def old_keybert_test(keywords, mail_id):
@@ -123,4 +139,3 @@ def old_keybert_test(keywords, mail_id):
 
 def old_get_byname(name):
     print("Get Mails by Name:")
-
