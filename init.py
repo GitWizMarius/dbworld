@@ -8,9 +8,14 @@ import pandas as pd
 # Preprocess of the DataSet
 # Contains Renaming, Data Converts, Sorts and handling NA Values
 def preprocess(df):
-    df = df.rename(columns={'Date Received': 'Date_Received', 'Sent on behalf of (display)': 'From_Name',
-                            'Sent on behalf of (address)': 'From_Mail'})
+    df = df.rename(columns={'Date Received': 'Date_Received',
+                            'Date Sent': 'Date_Sent',
+                            'Sent on behalf of (display)': 'From_Name',
+                            'Sent on behalf of (address)': 'From_Mail',
+                            'Body HTML': 'Body_HTML'})
     df['Subject'] = df['Subject'].str[10:]
+    df['Subject'] = df['Subject'].str.replace("'", "")
+    df['Subject'] = df['Subject'].str.replace('"', '')
     # Changing Data Types
     df = df.convert_dtypes()
     df['Date_Received'] = pd.to_datetime(df['Date_Received'], dayfirst=True)
