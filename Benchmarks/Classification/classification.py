@@ -16,7 +16,7 @@ df = df.drop(columns=['From_Name', 'From_Mail', 'Body_HTML'])
 
 
 
-
+# Todo: All of that Shit
 # Data Cleansing
 # remove links from text
 text = re.sub(r"http\S+", "", text)
@@ -27,3 +27,9 @@ text = text.lower().strip()
 # Replace some generic DBWorld Words :)
 text = text.replace('dbworld', '')
 text = text.replace('sigmod', '')
+
+
+# Model Training
+
+def random-forest-classifier(df):
+    a
