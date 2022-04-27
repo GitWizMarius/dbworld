@@ -17,7 +17,7 @@ import spacy
 nlp = spacy.load('en_core_web_sm')
 
 import pandas as pd
-import matplotlib
+
 
 # initiate BERT outside of functions
 # 2 different Versions

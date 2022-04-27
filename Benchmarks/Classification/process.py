@@ -23,6 +23,9 @@ def preprocess(df):
     df = df.reset_index(drop=True)
 
     df = df.fillna("Ops, something seems to be wrong here.")
+
+    df['Both'] = df['Subject'] + " - " + df['Body']
+
     return df
 
 

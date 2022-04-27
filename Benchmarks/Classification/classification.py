@@ -32,4 +32,3 @@ text = text.replace('sigmod', '')
 # Model Training
 
 def random-forest-classifier(df):
-    a

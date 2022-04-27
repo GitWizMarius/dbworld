@@ -54,7 +54,7 @@ def preprocess(text: str, r_stopwords: bool) -> str:
 # for each row of the dataframe, find the n terms that have the highest tf idf score
 def k_means(vec, df, name, vectorizer):
     # initialize KMeans with 4 clusters
-    kmeans = KMeans(n_clusters=2, random_state=42)
+    kmeans = KMeans(n_clusters=4, random_state=42)
     kmeans.fit(vec)
     clusters = kmeans.labels_
     # initialize PCA with 2 components
@@ -77,6 +77,7 @@ def k_means(vec, df, name, vectorizer):
     df['cluster'] = clusters
     df['x0'] = x0
     df['x1'] = x1
+
 
     cluster_map = {0: "1", 1: "2", 2: "3", 3: "4", 4: "5", 5: "6"}  # mapping found through get_top_keywords
     df['cluster'] = df['cluster'].map(cluster_map)
