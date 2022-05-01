@@ -7,7 +7,6 @@ import nltk
 nltk.download('stopwords')
 import spacy
 from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import chi2
@@ -120,16 +119,14 @@ def main():
         print('Error: Representation not implemented')
     ####################################################################################################################
     # 5. Saving Feature
-    with open('Pickles/X_train.pickle', 'wb') as output:
+    with open('Pickles/x_train.pickle', 'wb') as output:
         pickle.dump(x_train, output)
-    with open('Pickles/X_test.pickle', 'wb') as output:
+    with open('Pickles/x_test.pickle', 'wb') as output:
         pickle.dump(x_test, output)
     with open('Pickles/y_train.pickle', 'wb') as output:
         pickle.dump(y_train, output)
     with open('Pickles/y_test.pickle', 'wb') as output:
         pickle.dump(y_test, output)
-    with open('Pickles/df.pickle', 'wb') as output:
-        pickle.dump(df, output)
     with open('Pickles/features_train.pickle', 'wb') as output:
         pickle.dump(features_train, output)
     with open('Pickles/labels_train.pickle', 'wb') as output:
@@ -138,6 +135,8 @@ def main():
         pickle.dump(features_test, output)
     with open('Pickles/labels_test.pickle', 'wb') as output:
         pickle.dump(labels_test, output)
+    with open('Pickles/df.pickle', 'wb') as output:
+        pickle.dump(df, output)
 
     return df
 
