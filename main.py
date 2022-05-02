@@ -54,7 +54,6 @@ def main():
         # Todo: Write all to DataBase after element was processed
         # Todo: Implement all needed Functions
         if database:
-            # Todo: Doubled Check -> Check if there is a similar mail (If yes -> mark Keywords as doubled)
             doubled = db.check_double(dataset.loc[i, "Subject"])
             # Write Mail to DB
             while True:

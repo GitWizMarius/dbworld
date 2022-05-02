@@ -26,7 +26,6 @@ def preprocess(text: str, lemmatize: bool) -> str:
     text = text.replace('sigmod', '')
 
     # Lemmatize before so you dont get both: "(economic', 0.307), ('economics', 0.302)"
-    # Todo: Check Keyword Results after Lemmatize -> especially Multiple Keyword!
     if lemmatize:
         doc = lem_model(text)
         # token._.lemma() -> uses lemminflect (pip install lemminflect): better results (example: data will not/less be transformed to datum)

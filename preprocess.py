@@ -15,7 +15,6 @@ kw_model = KeyBERT(model='all-mpnet-base-v2')
 # Import the DataSet with correct encoding and Rename Columns
 def import_data():
     # Select Filepath from DataSet
-    # Todo: Add Error Handling for Import
     filepath = easygui.fileopenbox()
     try:
         # File Import with UTF8 encoding throws an Error

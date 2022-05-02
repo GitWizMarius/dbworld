@@ -11,8 +11,7 @@ def preprocess(df):
     df = df.rename(columns={'Date Received': 'Date_Received',
                             'Date Sent': 'Date_Sent',
                             'Sent on behalf of (display)': 'From_Name',
-                            'Sent on behalf of (address)': 'From_Mail',
-                            'Body HTML': 'Body_HTML'})
+                            'Sent on behalf of (address)': 'From_Mail'})
     df['Subject'] = df['Subject'].str[10:]
     df['Subject'] = df['Subject'].str.replace("'", "")
     df['Subject'] = df['Subject'].str.replace('"', '')
@@ -25,7 +24,7 @@ def preprocess(df):
     df = df.fillna("Ops, something seems to be wrong here.")
 
     df['Both'] = df['Subject'] + " - " + df['Body']
-
+    df['Length'] = df['Body'].str.len()
     return df
 
 
@@ -35,9 +34,10 @@ def import_data():
     filepath = easygui.fileopenbox()
     try:
         # File Import with ISO-8859-1 encoding -> UTF-8 is throwing a Error
-        df = pd.read_csv(filepath, encoding='ISO-8859-1', parse_dates=True)
-    except pd.io.common.EmptyDataError:
-        print("File is Empty/Etc.")
+        df = pd.read_excel(filepath, parse_dates=True)
+    except Exception as e:
+        print(e)
     finally:
         print(".CSV Import was successfully")
+    print(df)
     return preprocess(df)

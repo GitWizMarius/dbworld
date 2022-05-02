@@ -60,16 +60,14 @@ def main():
     # Create a Dictionary Containing the Different Categories/Groups and assign them a Number
     # Todo: Erstellen der Label Zuordnung anhand korrekter Daten (aktuell nur Platzhalter)
     label_codes = {
-        'World': 0,
-        'Sports': 1,
-        'Business': 2,
-        'Technology': 3,
-        'Science': 4,
-        'Health': 5,
-        'Entertainment': 6,
+        'CFP': 0,
+        'Conference Announcement': 1,
+        'Job Announcement': 2,
+        'News': 3,
+        'Workshop': 4,
     }
     # Create a new column in the DataFrame with copied Values from Classification Column
-    df['classification_codes'] = df['classification'].map(label_codes)
+    df['classification_codes'] = df['Classification'].map(label_codes)
     # Change new Column to Values in the label_codes Dictionary
     df = df.replace({'classification': label_codes})
     ####################################################################################################################
