@@ -58,7 +58,6 @@ def main():
     ####################################################################################################################
     # 2. Label Coding
     # Create a Dictionary Containing the Different Categories/Groups and assign them a Number
-    # Todo: Erstellen der Label Zuordnung anhand korrekter Daten (aktuell nur Platzhalter)
     label_codes = {
         'CFP': 0,
         'Conference Announcement': 1,
@@ -67,9 +66,9 @@ def main():
         'Workshop': 4,
     }
     # Create a new column in the DataFrame with copied Values from Classification Column
-    df['classification_codes'] = df['Classification'].map(label_codes)
+    df['classification_codes'] = df['Classification']
     # Change new Column to Values in the label_codes Dictionary
-    df = df.replace({'classification': label_codes})
+    df = df.replace({'classification_codes': label_codes})
     ####################################################################################################################
     # 3. Create Test Dataset to optimize the Modell Quality (Cross Validation to find the best Parameters)
     x_train, x_test, y_train, y_test = train_test_split(df[values],
