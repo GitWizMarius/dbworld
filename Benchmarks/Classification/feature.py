@@ -48,7 +48,7 @@ def main():
             df.loc[i, values] = ' '.join([token._.lemma() for token in doc])
 
     # Stopwords entfernen
-    stop_words = list(stopwords.word('english'))
+    stop_words = list(stopwords.words('english'))
     for stop_word in stop_words:
         regex = r"\b" + stop_word + r"\b"
         df[values] = df[values].str.replace(regex, '')
