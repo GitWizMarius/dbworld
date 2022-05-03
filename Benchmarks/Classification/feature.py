@@ -111,7 +111,7 @@ def main(values, df):
         labels_test = y_test
 
         # Save TF-IDF Vectorizer
-        with open('Pickles/tfidf.pickle', 'wb') as output:
+        with open('Pickles/{}/tfidf.pickle'.format(values), 'wb') as output:
             pickle.dump(tfidf_vectorizer, output)
 
     elif representation == 2:

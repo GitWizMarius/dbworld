@@ -12,32 +12,40 @@ import seaborn as sns
 import pandas as pd
 
 ########################################################################################################################
-# Load the Data we created in feature.py
-# 1. File Paths
-path_df = '../Pickles/df.pickle'
-path_features_train = '../Pickles/features_train.pickle'
-path_labels_train = '../Pickles/labels_train.pickle'
-path_features_test = '../Pickles/features_test.pickle'
-path_labels_test = '../Pickles/labels_test.pickle'
-# 2. Load Pickles form File Path
-with open(path_df, 'rb') as data:
-    df = pickle.load(data)
-with open(path_features_train, 'rb') as data:
-    features_train = pickle.load(data)
-with open(path_labels_train, 'rb') as data:
-    labels_train = pickle.load(data)
-with open(path_features_test, 'rb') as data:
-    features_test = pickle.load(data)
-with open(path_labels_test, 'rb') as data:
-    labels_test = pickle.load(data)
+
 ########################################################################################################################
 # RandomForestClassifier
 ########################################################################################################################
 # Cross-Validation for Algorithmen Tuning
+def load(values):
+    # Load the Data we created in feature.py
+    # 1. File Paths
+    path_df = '../Pickles/{}/df.pickle'.format(values)
+    path_features_train = '../Pickles/{}/features_train.pickle'.format(values)
+    path_labels_train = '../Pickles/{}/labels_train.pickle'.format(values)
+    path_features_test = '../Pickles/{}/features_test.pickle'.format(values)
+    path_labels_test = '../Pickles/{}/labels_test.pickle'.format(values)
+    # 2. Load Pickles form File Path
+    global df
+    global features_train
+    global labels_train
+    global features_test
+    global labels_test
+    with open(path_df, 'rb') as data:
+        df = pickle.load(data)
+    with open(path_features_train, 'rb') as data:
+        features_train = pickle.load(data)
+    with open(path_labels_train, 'rb') as data:
+        labels_train = pickle.load(data)
+    with open(path_features_test, 'rb') as data:
+        features_test = pickle.load(data)
+    with open(path_labels_test, 'rb') as data:
+        labels_test = pickle.load(data)
 
 # Randomized Search Cross Validation
-def rscv():
-    print('Start -> Randomized Search Cross Validation')
+def rscv(values):
+    print('#######################################################')
+    print('{} - Start -> Randomized Search Cross Validation'.format(values))
     # Parameters
     n_estimators = [int(x) for x in np.linspace(start=200, stop=2000, num=5)]  # Number of trees in forest
     max_features = ['auto', 'sqrt']  # Number of features to consider at every split
@@ -77,11 +85,17 @@ def rscv():
     # Print the best estimator
     print('Best Estimator:')
     print(rf_random_search.best_estimator_)
+    print('#######################################################')
 
 if __name__ == '__main__':
     # Please call only one Method at once
     # after that take the results and optimze parameters based on results before
     # Then start second Validation Process based on new parameters and use the best model for Classification
     print("Start")
-    rscv()
-
+    # Select Subject, Body or Both
+    data = 'Subject'
+    # Load Data from Pickles
+    load(data)
+    # Random Search Cross Validation
+    rscv(data)
+    # XX
