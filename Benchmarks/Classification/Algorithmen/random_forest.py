@@ -139,7 +139,7 @@ def gscv(values):
     # Last Step: Save the model
     global best_rf
     best_rf = grid_search.best_estimator_
-    with open('../Pickles/Models/best_rf.pickle', 'wb') as output:
+    with open('../Pickles/Models/best_rf_{}.pickle'.format(values), 'wb') as output:
         pickle.dump(best_rf, output)
 
 
@@ -149,8 +149,8 @@ def fit(values):
     # Fit Model to Training Data
     best_rf.fit(features_train, labels_train)
     # Get Predictions
-    print(features_test)
-    rf_pred = best_rf(features_test)
+    # print(features_test)
+    rf_pred = best_rf.predict(features_test)
 
     print('Training Accuracy: ')
     print(accuracy_score(labels_train, best_rf.predict(features_train)))
@@ -161,20 +161,31 @@ def fit(values):
     print('Classification Report')
     print(classification_report(labels_test, rf_pred))
 
-    #Optional -> Confusion Matrix (good for Studienarbeit)
+    # Optional -> Confusion Matrix (good for Studienarbeit)
     if True:
         aux_df = df[['Classification', 'classification_codes']].drop_duplicates().sort_values('classification_codes')
         conf_matrix = confusion_matrix(labels_test, rf_pred)
-        plt.figure(figsize=(12.8, 6))
+        plt.figure(figsize=(36, 18))
         sns.heatmap(conf_matrix,
-                annot=True,
-                xticklabels=aux_df['Classification'].values,
-                yticklabels=aux_df['Classification'].values,
-                cmap="Blues")
+                    annot=True,
+                    xticklabels=aux_df['Classification'].values,
+                    yticklabels=aux_df['Classification'].values,
+                    cmap="Blues")
         plt.ylabel('Predicted')
         plt.xlabel('Actual')
         plt.title('Confusion matrix')
         plt.show()
+
+    # Model Summary for Later Comparison
+    sum = {
+        'Model': 'Random Forest',
+        'Training Set Accuracy': accuracy_score(labels_train, best_rf.predict(features_train)),
+        'Test Set Accuracy': accuracy_score(labels_test, rf_pred)
+    }
+    sum_model_rf = pd.DataFrame(sum, index=[0])
+    with open('Models/df_models_rf_{}.pickle'.format(values), 'wb') as output:
+        pickle.dump(sum_model_rf, output)
+
 
 if __name__ == '__main__':
     # Please call only one Method at once
@@ -189,3 +200,19 @@ if __name__ == '__main__':
     # Grid Search Cross Validation
     gscv(data)
     fit(data)
+
+    """
+    ---- Auflistung der Werte aus Randomized Search Cross Validation ----
+    --Subject:
+    Best Algorithmen Parameters from randomized Search:
+    {'n_estimators': 1550, 'min_samples_split': 10, 'min_samples_leaf': 1, 'max_features': 'auto', 'max_depth': 35, 'bootstrap': True} 
+    Best Score from randomized Search (Mean Accuracy): 0.8395626748029494
+    --Body:
+    Best Algorithmen Parameters from randomized Search:
+    {'n_estimators': 200, 'min_samples_split': 2, 'min_samples_leaf': 2, 'max_features': 'sqrt', 'max_depth': 60, 'bootstrap': False}
+    Best Score from randomized Search (Mean Accuracy): 0.7407322654462242
+    --Both:
+    Best Algorithmen Parameters from randomized Search:
+    {'n_estimators': 200, 'min_samples_split': 5, 'min_samples_leaf': 2, 'max_features': 'sqrt', 'max_depth': 60, 'bootstrap': True}
+    Best Score from randomized Search (Mean Accuracy): 0.7436816679379609
+    """
