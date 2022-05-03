@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_curve, auc
 from sklearn.model_selection import ShuffleSplit
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -107,7 +107,7 @@ def gscv(values):
         'n_estimators': n_estimators
     }
 
-    # Create a Base Model with given Params
+    # Base Model
     rf = RandomForestClassifier(random_state=8)
 
     # Create splits in CV to be able to fix a random_stat
@@ -147,7 +147,6 @@ def fit(values):
     # Fit Model to Training Data
     best_rf.fit(features_train, labels_train)
     # Get Predictions
-    # print(features_test)
     rf_pred = best_rf.predict(features_test)
 
     print('Training Accuracy: ')
@@ -174,7 +173,7 @@ def fit(values):
         plt.title('Confusion Matrix')
         plt.tight_layout()
         #Save Plot in 4k Resolution OmegaLuL
-        plt.savefig('../Other/ConfusionMatrix_{}.png'.format(values), dpi=1200)
+        plt.savefig('../Other/ConfusionMatrix_rf_{}.png'.format(values), dpi=1200)
 
     # Model Summary for Later Comparison
     sum = {
@@ -183,7 +182,7 @@ def fit(values):
         'Test Set Accuracy': accuracy_score(labels_test, rf_pred)
     }
     sum_model_rf = pd.DataFrame(sum, index=[0])
-    with open('../Pickles/Models/df_models_rf_{}.pickle'.format(values), 'wb') as output:
+    with open('../Pickles/Models/sum_model_svm_{}.pickle'.format(values), 'wb') as output:
         pickle.dump(sum_model_rf, output)
 
 
