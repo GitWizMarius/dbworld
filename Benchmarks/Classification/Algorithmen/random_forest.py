@@ -145,8 +145,36 @@ def gscv(values):
 
 # Fit Model to our Traning Data and Test the "real" Performance :O
 def fit(values):
-    print('Fit it like a Boss')
+    print('{} - Fit it like a Boss'.format(values))
+    # Fit Model to Training Data
+    best_rf.fit(features_train, labels_train)
+    # Get Predictions
+    print(features_test)
+    rf_pred = best_rf(features_test)
 
+    print('Training Accuracy: ')
+    print(accuracy_score(labels_train, best_rf.predict(features_train)))
+
+    print('Test Accuracy')
+    print(accuracy_score(labels_test, rf_pred))
+
+    print('Classification Report')
+    print(classification_report(labels_test, rf_pred))
+
+    #Optional -> Confusion Matrix (good for Studienarbeit)
+    if True:
+        aux_df = df[['Classification', 'classification_codes']].drop_duplicates().sort_values('classification_codes')
+        conf_matrix = confusion_matrix(labels_test, rf_pred)
+        plt.figure(figsize=(12.8, 6))
+        sns.heatmap(conf_matrix,
+                annot=True,
+                xticklabels=aux_df['Classification'].values,
+                yticklabels=aux_df['Classification'].values,
+                cmap="Blues")
+        plt.ylabel('Predicted')
+        plt.xlabel('Actual')
+        plt.title('Confusion matrix')
+        plt.show()
 
 if __name__ == '__main__':
     # Please call only one Method at once
@@ -157,6 +185,7 @@ if __name__ == '__main__':
     # Load Data from Pickles
     load(data)
     # Random Search Cross Validation
-    #rscv(data)
+    # rscv(data)
     # Grid Search Cross Validation
     gscv(data)
+    fit(data)
