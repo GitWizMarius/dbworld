@@ -11,12 +11,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
-########################################################################################################################
 
 ########################################################################################################################
 # RandomForestClassifier
 ########################################################################################################################
-# Cross-Validation for Algorithmen Tuning
 def load(values):
     # Load the Data we created in feature.py
     # 1. File Paths
@@ -41,6 +39,7 @@ def load(values):
         features_test = pickle.load(data)
     with open(path_labels_test, 'rb') as data:
         labels_test = pickle.load(data)
+
 
 # Randomized Search Cross Validation
 def rscv(values):
@@ -76,26 +75,88 @@ def rscv(values):
     # Fit the random search model
     rf_random_search.fit(features_train, labels_train)
     # Print the best parameters
-    print('Best Algorithmen Parameters from randomized Search:')
+    print('Best Algorithm Parameters from randomized Search:')
     print(rf_random_search.best_params_)
     # Print the best score
     print('Best Score from randomized Search (Mean Accuracy):')
     print(rf_random_search.best_score_)
-
     # Print the best estimator
     print('Best Estimator:')
     print(rf_random_search.best_estimator_)
     print('#######################################################')
 
+
+# Grid Search Cross Validation
+def gscv(values):
+    print('#######################################################')
+    print('{} - Start -> Grid Search Cross Validation'.format(values))
+    # Parameters -> using Parameters from Randomized Search (First Run)
+    # If max_depth is 60 than max_depth = [50, 60, 70] (same for min_samples_leaf and min_samples_split)
+    bootstrap = [False]  # Method of selecting samples for training each tree
+    max_depth = [50, 60, 70]  # Maximum number of levels in tree
+    max_features = ['auto']  # Number of features to consider at every split
+    min_samples_leaf = [1, 2, 4]  # Minimum number of samples required at each leaf node
+    min_samples_split = [5, 10, 15]  # Minimum number of samples required to split a node
+    n_estimators = [1550]  # Number of trees in forest
+
+    # Create the parameter grid
+    param_grid = {
+        'bootstrap': bootstrap,
+        'max_depth': max_depth,
+        'max_features': max_features,
+        'min_samples_leaf': min_samples_leaf,
+        'min_samples_split': min_samples_split,
+        'n_estimators': n_estimators
+    }
+
+    # Create a Base Model with given Params
+    rf = RandomForestClassifier(random_state=8)
+
+    # Create splits in CV to be able to fix a random_stat
+    # GridSearchCV does not have that argument -> use a Testsize of 1/3 (.33)
+    cv_sets = ShuffleSplit(n_splits=3, test_size=.33, random_state=8)
+
+    # Grid Search Model
+    grid_search = GridSearchCV(
+        estimator=rf,
+        param_grid=param_grid,
+        cv=cv_sets,
+        verbose=1,
+        scoring='accuracy'
+    )
+
+    # Fit Grid Search Model to the given Data from Feature Engineering
+    grid_search.fit(features_train, labels_train)
+
+    print("Best Parameters using Grid Search:")
+    print(grid_search.best_params_)
+    print('Best Score from randomized Search (Mean Accuracy):')
+    print(grid_search.best_score_)
+    print('Best Estimator:')
+    print(grid_search.best_estimator_)
+    print('#######################################################')
+
+    # Last Step: Save the model
+    global best_rf
+    best_rf = grid_search.best_estimator_
+    with open('../Pickles/Models/best_rf.pickle', 'wb') as output:
+        pickle.dump(best_rf, output)
+
+
+# Fit Model to our Traning Data and Test the "real" Performance :O
+def fit(values):
+    print('Fit it like a Boss')
+
+
 if __name__ == '__main__':
     # Please call only one Method at once
     # after that take the results and optimze parameters based on results before
     # Then start second Validation Process based on new parameters and use the best model for Classification
-    print("Start")
     # Select Subject, Body or Both
     data = 'Subject'
     # Load Data from Pickles
     load(data)
     # Random Search Cross Validation
-    rscv(data)
-    # XX
+    #rscv(data)
+    # Grid Search Cross Validation
+    gscv(data)
