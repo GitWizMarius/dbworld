@@ -92,12 +92,12 @@ def gscv(values):
     print('{} - Start -> Grid Search Cross Validation'.format(values))
     # Parameters -> using Parameters from Randomized Search (First Run)
     # If max_depth is 60 than max_depth = [50, 60, 70] (same for min_samples_leaf and min_samples_split)
-    bootstrap = [False]  # Method of selecting samples for training each tree
+    bootstrap = [True]  # Method of selecting samples for training each tree
     max_depth = [50, 60, 70]  # Maximum number of levels in tree
-    max_features = ['auto']  # Number of features to consider at every split
+    max_features = ['sqrt']  # Number of features to consider at every split
     min_samples_leaf = [1, 2, 4]  # Minimum number of samples required at each leaf node
-    min_samples_split = [5, 10, 15]  # Minimum number of samples required to split a node
-    n_estimators = [1550]  # Number of trees in forest
+    min_samples_split = [2, 5, 7]  # Minimum number of samples required to split a node
+    n_estimators = [200]  # Number of trees in forest
 
     # Create the parameter grid
     param_grid = {
@@ -155,7 +155,7 @@ def fit(values):
     print('Training Accuracy: ')
     print(accuracy_score(labels_train, best_rf.predict(features_train)))
 
-    print('Test Accuracy')
+    print('Test Accuracy: ')
     print(accuracy_score(labels_test, rf_pred))
 
     print('Classification Report')
@@ -165,16 +165,18 @@ def fit(values):
     if True:
         aux_df = df[['Classification', 'classification_codes']].drop_duplicates().sort_values('classification_codes')
         conf_matrix = confusion_matrix(labels_test, rf_pred)
-        plt.figure(figsize=(36, 18))
+        #plt.figure(figsize=(12, 6)
         sns.heatmap(conf_matrix,
                     annot=True,
                     xticklabels=aux_df['Classification'].values,
                     yticklabels=aux_df['Classification'].values,
-                    cmap="Blues")
+                    cmap="BuGn")
         plt.ylabel('Predicted')
         plt.xlabel('Actual')
-        plt.title('Confusion matrix')
-        plt.show()
+        plt.title('Confusion Matrix')
+        plt.tight_layout()
+        #Save Plot in 4k Resolution OmegaLuL
+        plt.savefig('../Other/ConfusionMatrix_{}.png'.format(values), dpi=1200)
 
     # Model Summary for Later Comparison
     sum = {
@@ -183,7 +185,7 @@ def fit(values):
         'Test Set Accuracy': accuracy_score(labels_test, rf_pred)
     }
     sum_model_rf = pd.DataFrame(sum, index=[0])
-    with open('Models/df_models_rf_{}.pickle'.format(values), 'wb') as output:
+    with open('../Pickles/Models/df_models_rf_{}.pickle'.format(values), 'wb') as output:
         pickle.dump(sum_model_rf, output)
 
 
@@ -192,14 +194,19 @@ if __name__ == '__main__':
     # after that take the results and optimze parameters based on results before
     # Then start second Validation Process based on new parameters and use the best model for Classification
     # Select Subject, Body or Both
-    data = 'Subject'
+    data = 'Both'
+    run = 2 # 1 is for First Step and 2 for Second Step
     # Load Data from Pickles
     load(data)
-    # Random Search Cross Validation
-    # rscv(data)
-    # Grid Search Cross Validation
-    gscv(data)
-    fit(data)
+
+    if run == 1:
+        # Random Search Cross Validation
+        rscv(data)
+    elif run == 2:
+        # Grid Search Cross Validation
+        gscv(data)
+        fit(data)
+
 
     """
     ---- Auflistung der Werte aus Randomized Search Cross Validation ----
