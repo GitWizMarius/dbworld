@@ -125,17 +125,3 @@ def check_double(text):
         return 1
 
     return exists
-
-
-def old_keybert_test(keywords, mail_id):
-    # print("Insert Keyword:" + keywords + " to ID:" + mail_id)
-    query = "INSERT INTO keywordssingle(id, keyword) values(%s, %s)"
-    print(keywords)
-    print(type(keywords))
-
-    for index, tuple in enumerate(keywords):
-        print(tuple[0])
-
-
-def old_get_byname(name):
-    print("Get Mails by Name:")
