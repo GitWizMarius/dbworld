@@ -1,6 +1,7 @@
-# DBWorld Studienarbeit
+# DBWorld Studienarbeit - Python Code
 
-Author: Marius Armbruster, Jakub Cielecki \
+Author: Marius Armbruster
+
 Betreuer: Prof. Dr.-Ing. Olaf Herden \
 \
 Python Version: 3.8
