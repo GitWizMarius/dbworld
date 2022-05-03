@@ -25,6 +25,7 @@ def preprocess(df):
 
     df['Both'] = df['Subject'] + " - " + df['Body']
     df['Length'] = df['Body'].str.len()
+
     return df
 
 

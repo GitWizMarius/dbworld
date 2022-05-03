@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import nltk
 import openpyxl
+
 # Downloading the stop words list
 nltk.download('stopwords')
 import spacy
@@ -17,27 +18,32 @@ import lemminflect
 ########################################################################################################################
 # Settings
 lemmatize = True
-values = 'Subject'  # 'Subject' or 'Body' or 'Both' -> Select which Column to use for the feature extraction
+#values = 'Body'  # 'Subject' or 'Body' or 'Both' -> Select which Column to use for the feature extraction
 representation = 1  # 1 = TF-IDF, 2 = XXX -> Todo: Implement other Text Representation Methods if Time is enough
 
+####################################################################################################################
+# Load Dataset
+from Benchmarks.Classification import process
 
-def main():
-    ####################################################################################################################
-    # Load Dataset
-    from Benchmarks.Classification import process
+dataset = process.import_data()
+print('DataSet imported with following DataTypes:')
+print(dataset.dtypes)
+print(dataset.head())
+print('========================================================')
+####################################################################################################################
 
-    df = process.import_data()
-    print('DataSet imported with following DataTypes:')
-    print(df.dtypes)
-    print(df.head())
-    print('========================================================')
-    ####################################################################################################################
+
+def main(values, df):
+    df = df[-df.Classification.str.contains("tbd")]
+    df = df.reset_index(drop=True)
+    print(df['Classification'].unique())
     # 1. Data Cleansing and Preprocessing
     df[values] = df[values].str.replace(r"http\S+", " ")
     df[values] = df[values].str.replace("[^A-Za-z]+", " ")
     df[values] = df[values].str.replace("'s", "")
     # Text to Lowercase so "Yolo" and "yolo" are the same
     df[values] = df[values].str.lower()
+
 
     # Lemmatization der Bodys mit Spacy und Lemminflect
     if lemmatize:
@@ -66,9 +72,11 @@ def main():
         'Workshop': 4,
     }
     # Create a new column in the DataFrame with copied Values from Classification Column
-    df['classification_codes'] = df['Classification']
+    # Create a new column in the DataFrame with copied Values from Classification Column
+    df['classification_codes'] = df['Classification'].map(label_codes)
     # Change new Column to Values in the label_codes Dictionary
-    df = df.replace({'classification_codes': label_codes})
+    # df = df.replace({'classification_codes': label_codes}
+    print(df)
     ####################################################################################################################
     # 3. Create Test Dataset to optimize the Modell Quality (Cross Validation to find the best Parameters)
     x_train, x_test, y_train, y_test = train_test_split(df[values],
@@ -116,27 +124,30 @@ def main():
         print('Error: Representation not implemented')
     ####################################################################################################################
     # 5. Saving Feature
-    with open('Pickles/x_train.pickle', 'wb') as output:
+    with open('Pickles/{}/x_train.pickle'.format(values), 'wb') as output:
         pickle.dump(x_train, output)
-    with open('Pickles/x_test.pickle', 'wb') as output:
+    with open('Pickles/{}/x_test.pickle'.format(values), 'wb') as output:
         pickle.dump(x_test, output)
-    with open('Pickles/y_train.pickle', 'wb') as output:
+    with open('Pickles/{}/y_train.pickle'.format(values), 'wb') as output:
         pickle.dump(y_train, output)
-    with open('Pickles/y_test.pickle', 'wb') as output:
+    with open('Pickles/{}/y_test.pickle'.format(values), 'wb') as output:
         pickle.dump(y_test, output)
-    with open('Pickles/features_train.pickle', 'wb') as output:
+    with open('Pickles/{}/features_train.pickle'.format(values), 'wb') as output:
         pickle.dump(features_train, output)
-    with open('Pickles/labels_train.pickle', 'wb') as output:
+    with open('Pickles/{}/labels_train.pickle'.format(values), 'wb') as output:
         pickle.dump(labels_train, output)
-    with open('Pickles/features_test.pickle', 'wb') as output:
+    with open('Pickles/{}/features_test.pickle'.format(values), 'wb') as output:
         pickle.dump(features_test, output)
-    with open('Pickles/labels_test.pickle', 'wb') as output:
+    with open('Pickles/{}/labels_test.pickle'.format(values), 'wb') as output:
         pickle.dump(labels_test, output)
-    with open('Pickles/df.pickle', 'wb') as output:
+    with open('Pickles/{}/df.pickle'.format(values), 'wb') as output:
         pickle.dump(df, output)
 
-    return df
+    print('Set with {} is done'.format(values))
 
 if __name__ == '__main__':
-    df = main()
+    # Features for Subject, Body and Both
+    main('Subject', dataset)
+    main('Body', dataset)
+    main('Both', dataset)
     print('Done')
