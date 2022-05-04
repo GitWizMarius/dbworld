@@ -52,7 +52,7 @@ def mnb(values):
     print('Classification Report')
     print(classification_report(labels_test, mnb_pred))
 
-    with open('Models/best_mnb_{}.pickle'.format(values), 'wb') as output:
+    with open('../Pickles/Models/best_mnb_{}.pickle'.format(values), 'wb') as output:
         pickle.dump(mnb, output)
 
     # Optional -> Confusion Matrix (good for Studienarbeit)
@@ -84,7 +84,7 @@ def mnb(values):
 
 if __name__ == '__main__':
     # Select Subject, Body or Both
-    data = 'Subject'
+    data = 'Both'
     # Load Data from Pickles
     load(data)
     # Start mnb Model
