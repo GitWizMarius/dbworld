@@ -52,7 +52,7 @@ def rscv(values):
     min_samples_leaf = [1, 2, 4]  # Minimum number of samples required at each leaf node
     bootstrap = [True, False]  # Method of selecting samples for training each tree
 
-    # Create the random grid
+    # Create random grid
     random_grid = {'n_estimators': n_estimators,
                    'max_features': max_features,
                    'max_depth': max_depth,
@@ -67,8 +67,15 @@ def rscv(values):
 
     # Create the random search model
     # n_jobs = -1 means use all available CPUs
-    rf_random_search = RandomizedSearchCV(estimator=rf, param_distributions=random_grid, n_iter=200, cv=3, verbose=1,
-                                          random_state=8, n_jobs=-1, scoring='accuracy')
+    rf_random_search = RandomizedSearchCV(
+        estimator=rf,
+        param_distributions=random_grid,
+        n_iter=200,
+        cv=3,
+        verbose=1,
+        random_state=8,
+        n_jobs=-1,
+        scoring='accuracy')
 
     # Fit the random search model
     rf_random_search.fit(features_train, labels_train)
@@ -97,7 +104,7 @@ def gscv(values):
     min_samples_split = [2, 5, 7]  # Minimum number of samples required to split a node
     n_estimators = [200]  # Number of trees in forest
 
-    # Create the parameter grid
+    # Create parameter grid
     param_grid = {
         'bootstrap': bootstrap,
         'max_depth': max_depth,
@@ -115,7 +122,7 @@ def gscv(values):
     cv_sets = ShuffleSplit(n_splits=3, test_size=.33, random_state=8)
 
     # Grid Search Model
-    grid_search = GridSearchCV(
+    rf_grid_search = GridSearchCV(
         estimator=rf,
         param_grid=param_grid,
         cv=cv_sets,
@@ -124,19 +131,19 @@ def gscv(values):
     )
 
     # Fit Grid Search Model to the given Data from Feature Engineering
-    grid_search.fit(features_train, labels_train)
+    rf_grid_search.fit(features_train, labels_train)
 
     print("Best Parameters using Grid Search:")
-    print(grid_search.best_params_)
+    print(rf_grid_search.best_params_)
     print('Best Score from randomized Search (Mean Accuracy):')
-    print(grid_search.best_score_)
+    print(rf_grid_search.best_score_)
     print('Best Estimator:')
-    print(grid_search.best_estimator_)
+    print(rf_grid_search.best_estimator_)
     print('#######################################################')
 
     # Last Step: Save the model
     global best_rf
-    best_rf = grid_search.best_estimator_
+    best_rf = rf_grid_search.best_estimator_
     with open('../Pickles/Models/best_rf_{}.pickle'.format(values), 'wb') as output:
         pickle.dump(best_rf, output)
 
@@ -146,6 +153,8 @@ def fit(values):
     print('{} - Fit it like a Boss'.format(values))
     # Fit Model to Training Data
     best_rf.fit(features_train, labels_train)
+
+    #best_rf.fit(features_train, labels_train)
     # Get Predictions
     rf_pred = best_rf.predict(features_test)
 

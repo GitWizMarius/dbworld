@@ -37,16 +37,17 @@ def load(values):
     with open(path_labels_test, 'rb') as data:
         labels_test = pickle.load(data)
 
+
 # Randomized Search Cross Validation
 def rscv(values):
     print('#######################################################')
     print('{} - Start -> Randomized Search Cross Validation'.format(values))
     # Parameters
     C = [.0001, .001, .01]  # Penalty Parameter
-    gamma = [.0001, .001, .01, .1, 1, 10, 100] # Kernel Coefficient
-    degree = [1, 2, 3, 4, 5] # Degree of the polynomial kernel
-    kernel = ['linear', 'rbf', 'poly'] # Kernel Type
-    probability = [True] # Whether to enable probability estimates
+    gamma = [.0001, .001, .01, .1, 1, 10, 100]  # Kernel Coefficient
+    degree = [1, 2, 3, 4, 5]  # Degree of the polynomial kernel
+    kernel = ['linear', 'rbf', 'poly']  # Kernel Type
+    probability = [True]  # Whether to enable probability estimates
 
     # Create the parameter grid
     param_grid = {
@@ -66,7 +67,8 @@ def rscv(values):
         scoring='accuracy',
         cv=3,
         verbose=1,
-        random_state=8
+        random_state=8,
+        n_jobs=-1,
     )
     # Fit to Base Model
     svm_random_search.fit(features_train, labels_train)
@@ -82,16 +84,24 @@ def rscv(values):
     print(svm_random_search.best_estimator_)
     print('#######################################################')
 
+    # Test best Estimator from Random Search instead of Grid Search
+    if True:
+        # Last Step: Save the model
+        global best_svm
+        best_svm = svm_random_search.best_estimator_
+        with open('../Pickles/Models/best_svm_randomsearch_{}.pickle'.format(values), 'wb') as output:
+            pickle.dump(best_svm, output)
+
 
 # Grid Search Cross Validation
 def gscv(values):
     print('#######################################################')
     print('{} - Start -> Grid Search Cross Validation'.format(values))
     # Parameters -> using Parameters from Randomized Search (First Run)
-    C = [.0001, .001, .01, .1] # Penalty Parameter
-    degree = [3, 4, 5] # Degree of the polynomial kernel
-    gamma = [1, 10, 100] # Kernel Coefficient
-    probability = [True] # Whether to enable probability estimates
+    C = [.0001, .001, .01, .1]  # Penalty Parameter
+    degree = [1, 2, 10]  # Degree of the polynomial kernel
+    gamma = [60, 100, 160]  # Kernel Coefficient
+    probability = [True]  # Whether to enable probability estimates
 
     # Create the parameter grid
     param_grid = [
@@ -112,8 +122,10 @@ def gscv(values):
         param_grid=param_grid,
         scoring='accuracy',
         cv=cv_sets,
-        verbose=1
-        )
+        verbose=1,
+        n_jobs=-1,
+    )
+
     # Fit to the data
     svm_grid_search.fit(features_train, labels_train)
 
@@ -133,6 +145,7 @@ def gscv(values):
     best_svm = svm_grid_search.best_estimator_
     with open('../Pickles/Models/best_svm_{}.pickle'.format(values), 'wb') as output:
         pickle.dump(best_svm, output)
+
 
 # Fit Model to our Traning Data and Test the "real" Performance :O
 def fit(values):
@@ -178,19 +191,21 @@ def fit(values):
     with open('../Pickles/Models/sum_model_svm_{}.pickle'.format(values), 'wb') as output:
         pickle.dump(sum_model_svm, output)
 
+
 if __name__ == '__main__':
     # Please call only one Method at once
     # after that take the results and optimze parameters based on results before
     # Then start second Validation Process based on new parameters and use the best model for Classification
     # Select Subject, Body or Both
-    data = 'Subject'
-    run = 2 # 1 is for First Step and 2 for Second Step
+    data = 'Both'
+    run = 1  # 1 is for First Step and 2 for Second Step
     # Load Data from Pickles
     load(data)
 
     if run == 1:
         # Random Search Cross Validation
         rscv(data)
+        fit(data)
     elif run == 2:
         # Grid Search Cross Validation
         gscv(data)
