@@ -84,16 +84,29 @@ def rscv(values):
     print(mlr_random_search.best_estimator_)
     print('#######################################################')
 
+    # Test best Estimator from Random Search instead of Grid Search
+    if True:
+        # Last Step: Save the model
+        global best_mlr
+        best_mlr = mlr_random_search.best_estimator_
+        with open('../Pickles/Models/best_mlr_randomsearch_{}.pickle'.format(values), 'wb') as output:
+            pickle.dump(best_mlr, output)
+
 # Grid Search Cross Validation
 def gscv(values):
     print('#######################################################')
     print('{} - Start -> Grid Search Cross Validation'.format(values))
     # Parameters (change manually base on rscv)
-    C = [float(x) for x in np.linspace(start=0.6, stop=1, num=10)] # Inverse of Regularization Strength
+    C = [float(x) for x in np.linspace(start=0.1, stop=1, num=10)] # Inverse of Regularization Strength
     multi_class = ['multinomial'] # Type of Classifier
-    solver = ['sag'] # Solver for the optimization problem
-    class_weight = ['balanced'] # Class Weight
+    solver = ['newton-cg'] # Solver for the optimization problem
+    class_weight = [None] # Class Weight
     penalty = ['l2'] # Penalty
+
+    '''
+    {'solver': 'newton-cg', 'penalty': 'l2', 'multi_class': 'multinomial', 'class_weight': None, 'C': 0.6}
+    '''
+
 
     # Create parameter grid
     mlr_param_grid = {
@@ -142,7 +155,6 @@ def fit(values):
     # Fit Model to Training Data
     best_mlr.fit(features_train, labels_train)
 
-    # best_rf.fit(features_train, labels_train)
     # Get Predictions
     mlr_pred = best_mlr.predict(features_test)
 
@@ -170,7 +182,7 @@ def fit(values):
         plt.title('Confusion Matrix')
         plt.tight_layout()
         # Save Plot in 4k Resolution OmegaLuL
-        plt.savefig('../Other/ConfusionMatrix_rf_{}.png'.format(values), dpi=1200)
+        plt.savefig('../Other/ConfusionMatrix_mlr_{}.png'.format(values), dpi=1200)
 
     # Model Summary for Later Comparsion
     sum = {
@@ -197,6 +209,7 @@ if __name__ == '__main__':
     if run == 1:
         # Random Search Cross Validation
         rscv(data)
+        fit(data)
     elif run == 2:
         # Grid Search Cross Validation
         gscv(data)

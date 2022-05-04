@@ -103,6 +103,7 @@ def gscv(values):
     gamma = [60, 100, 160]  # Kernel Coefficient
     probability = [True]  # Whether to enable probability estimates
 
+
     # Create the parameter grid
     param_grid = [
         {'C': C, 'kernel': ['linear'], 'probability': probability},
