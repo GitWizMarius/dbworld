@@ -8,6 +8,9 @@ import pandas as pd
 
 ########################################################################################################################
 # Multinomial Naive Bayes
+# References:
+# https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html
+# https://www.analyticsvidhya.com/blog/2020/11/understanding-naive-bayes-svm-and-its-implementation-on-spam-sms/
 ########################################################################################################################
 def load(values):
     # Load the Data we created in feature.py

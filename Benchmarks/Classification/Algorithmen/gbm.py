@@ -1,8 +1,11 @@
 import pickle
-from sklearn import svm
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.ensemble import GradientBoostingClassifier
+from pprint import pprint
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_curve, auc
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.model_selection import ShuffleSplit
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -10,9 +13,10 @@ import pandas as pd
 
 
 ########################################################################################################################
-# Support Vector Machine
-# Reference:
-# https://scikit-learn.org/stable/auto_examples/svm/plot_rbf_parameters.html
+# Gradient Boosting Machine
+# References:
+# https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html
+# https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/
 ########################################################################################################################
 def load(values):
     # Load the Data we created in feature.py
@@ -45,54 +49,60 @@ def rscv(values):
     print('#######################################################')
     print('{} - Start -> Randomized Search Cross Validation'.format(values))
     # Parameters
-    C = [.0001, .001, .01]  # Penalty Parameter
-    gamma = [.0001, .001, .01, .1, 1, 10, 100]  # Kernel Coefficient
-    degree = [1, 2, 3, 4, 5]  # Degree of the polynomial kernel
-    kernel = ['linear', 'rbf', 'poly']  # Kernel Type
-    probability = [True]  # Whether to enable probability estimates
+    n_estimators = [200, 300, 400, 500, 600, 700, 800, 900, 1000]  # Number of Trees
+    max_features = ['auto', 'sqrt']  # Number of Features
+    max_depth = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]  # Max Depth
+    max_depth.append(None)  # None
+    min_samples_split = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]  # Min Samples Split
+    min_samples_leaf = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Min Samples Leaf
+    learning_rate = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]  # Learning Rate
+    subsample = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]  # Subsample
 
     # Create the parameter grid
     param_grid = {
-        'C': C,
-        'gamma': gamma,
-        'kernel': kernel,
-        'degree': degree,
-        'probability': probability
+        'n_estimators': n_estimators,
+        'max_features': max_features,
+        'max_depth': max_depth,
+        'min_samples_split': min_samples_split,
+        'min_samples_leaf': min_samples_leaf,
+        'learning_rate': learning_rate,
+        'subsample': subsample
     }
     # Base Model
-    svc = svm.SVC(random_state=8)
+    gbm = GradientBoostingClassifier(random_state=8)
+
     # Random Search Definition
-    svm_random_search = RandomizedSearchCV(
-        estimator=svc,
+    gbm_random_search = RandomizedSearchCV(
+        estimator=gbm,
         param_distributions=param_grid,
-        n_iter=200,
+        n_iter=50,
         scoring='accuracy',
         cv=3,
         verbose=1,
         random_state=8,
-        n_jobs=-1,
+        n_jobs=-1
     )
     # Fit to Base Model
-    svm_random_search.fit(features_train, labels_train)
+    gbm_random_search.fit(features_train, labels_train)
 
     # Print the best parameters
     print('Best Algorithm Parameters from randomized Search:')
-    print(svm_random_search.best_params_)
+    print(gbm_random_search.best_params_)
     # Print the best score
     print('Best Score from randomized Search (Mean Accuracy):')
-    print(svm_random_search.best_score_)
+    print(gbm_random_search.best_score_)
     # Print the best estimator
     print('Best Estimator:')
-    print(svm_random_search.best_estimator_)
+    print(gbm_random_search.best_estimator_)
     print('#######################################################')
 
     # Test best Estimator from Random Search instead of Grid Search
     if True:
         # Last Step: Save the model
-        global best_svm
-        best_svm = svm_random_search.best_estimator_
-        with open('../Pickles/Models/best_svm_randomsearch_{}.pickle'.format(values), 'wb') as output:
-            pickle.dump(best_svm, output)
+        global best_gbm
+        best_gbm = gbm_random_search.best_estimator_
+        with open('../Pickles/Models/best_gbm_randomsearch_{}.pickle'.format(values), 'wb') as output:
+            pickle.dump(best_gbm, output)
 
 
 # Grid Search Cross Validation
@@ -100,77 +110,83 @@ def gscv(values):
     print('#######################################################')
     print('{} - Start -> Grid Search Cross Validation'.format(values))
     # Parameters -> using Parameters from Randomized Search (First Run)
-    C = [.0001, .001, .01, .1]  # Penalty Parameter
-    degree = [1, 2, 10]  # Degree of the polynomial kernel
-    gamma = [60, 100, 160]  # Kernel Coefficient
-    probability = [True]  # Whether to enable probability estimates
-
+    max_depth = [35, 40, 45]  # Max Depth
+    max_features = ['sqrt']  # Number of Features
+    min_samples_leaf = [9]  # Min Samples Leaf
+    min_samples_split = [80, 120]  # Min Samples Split
+    n_estimators = [400]  # Number of Trees
+    learning_rate = [.1, 1.]  # Learning Rate
+    subsample = [.9]  # Subsample
 
     # Create the parameter grid
-    param_grid = [
-        {'C': C, 'kernel': ['linear'], 'probability': probability},
-        {'C': C, 'kernel': ['poly'], 'degree': degree, 'probability': probability},
-        {'C': C, 'kernel': ['rbf'], 'gamma': gamma, 'probability': probability}
-    ]
+    param_grid = {
+        'max_depth': max_depth,
+        'max_features': max_features,
+        'min_samples_leaf': min_samples_leaf,
+        'min_samples_split': min_samples_split,
+        'n_estimators': n_estimators,
+        'learning_rate': learning_rate,
+        'subsample': subsample
+    }
 
     # Base Model
-    svc = svm.SVC(random_state=8)
+    gbm = GradientBoostingClassifier(random_state=8)
+
     # Create splits in CV to be able to fix a random_stat
     # GridSearchCV does not have that argument -> use a Testsize of 1/3 (.33)
     cv_sets = ShuffleSplit(n_splits=3, test_size=.33, random_state=8)
 
     # Create a Grid Search Object
-    svm_grid_search = GridSearchCV(
-        estimator=svc,
+    gbm_grid_search = GridSearchCV(
+        estimator=gbm,
         param_grid=param_grid,
         scoring='accuracy',
         cv=cv_sets,
-        verbose=1,
-        n_jobs=-1,
+        verbose=1
     )
 
     # Fit to the data
-    svm_grid_search.fit(features_train, labels_train)
+    gbm_grid_search.fit(features_train, labels_train)
 
     # Print the best parameters
     print('Best Algorithm Parameters from Grid Search:')
-    print(svm_grid_search.best_params_)
+    print(gbm_grid_search.best_params_)
     # Print the best score
     print('Best Score from Grid Search (Mean Accuracy):')
-    print(svm_grid_search.best_score_)
+    print(gbm_grid_search.best_score_)
     # Print the best estimator
     print('Best Estimator:')
-    print(svm_grid_search.best_estimator_)
+    print(gbm_grid_search.best_estimator_)
     print('#######################################################')
 
     # Last Step: Save the model
-    global best_svm
-    best_svm = svm_grid_search.best_estimator_
-    with open('../Pickles/Models/best_svm_{}.pickle'.format(values), 'wb') as output:
-        pickle.dump(best_svm, output)
+    global best_gbm
+    best_gbm = gbm_grid_search.best_estimator_
+    with open('../Pickles/Models/best_gbm_{}.pickle'.format(values), 'wb') as output:
+        pickle.dump(best_gbm, output)
 
 
 # Fit Model to our Traning Data and Test the "real" Performance :O
 def fit(values):
     print('{} - Fit it like a Boss'.format(values))
     # Fit Model to Training Data
-    best_svm.fit(features_train, labels_train)
-    # Get Predictions
-    svm_pred = best_svm.predict(features_test)
+    best_gbm.fit(features_train, labels_train)
+    # Predict on the Test Data
+    gbm_pred = best_gbm.predict(features_test)
 
     print('Training Accuracy: ')
-    print(accuracy_score(labels_train, best_svm.predict(features_train)))
+    print(accuracy_score(labels_train, best_gbm.predict(features_train)))
 
     print('Testing Accuracy: ')
-    print(accuracy_score(labels_test, svm_pred))
+    print(accuracy_score(labels_test, gbm_pred))
 
     print('Classification Report: ')
-    print(classification_report(labels_test, svm_pred))
+    print(classification_report(labels_test, gbm_pred))
 
     # Optional -> Confusion Matrix (good for Studienarbeit)
     if True:
         aux_df = df[['Classification', 'classification_codes']].drop_duplicates().sort_values('classification_codes')
-        conf_matrix = confusion_matrix(labels_test, svm_pred)
+        conf_matrix = confusion_matrix(labels_test, gbm_pred)
         # plt.figure(figsize=(12, 6)
         sns.heatmap(conf_matrix,
                     annot=True,
@@ -182,17 +198,17 @@ def fit(values):
         plt.title('Confusion Matrix')
         plt.tight_layout()
         # Save Plot in 4k Resolution OmegaLuL
-        plt.savefig('../Other/ConfusionMatrix_svm_{}.png'.format(values), dpi=1200)
+        plt.savefig('../Other/ConfusionMatrix_gbm_{}.png'.format(values), dpi=1200)
 
     # Model Summary for Later Comparison
     sum = {
-        'Model': 'Support Vector Machine',
-        'Training Set Accuracy': accuracy_score(labels_train, best_svm.predict(features_train)),
-        'Test Set Accuracy': accuracy_score(labels_test, svm_pred)
+        'Model': 'Gradient Boosting Machine',
+        'Training Set Accuracy': accuracy_score(labels_train, best_gbm.predict(features_train)),
+        'Test Set Accuracy': accuracy_score(labels_test, gbm_pred)
     }
-    sum_model_svm = pd.DataFrame(sum, index=[0])
-    with open('../Pickles/Models/sum_model_svm_{}.pickle'.format(values), 'wb') as output:
-        pickle.dump(sum_model_svm, output)
+    sum_model_gbm = pd.DataFrame(sum, index=[0])
+    with open('../Pickles/Models/sum_model_gbm_{}.pickle'.format(values), 'wb') as output:
+        pickle.dump(sum_model_gbm, output)
 
 
 if __name__ == '__main__':
@@ -201,14 +217,14 @@ if __name__ == '__main__':
     # Then start second Validation Process based on new parameters and use the best model for Classification
     # Select Subject, Body or Both
     data = 'Both'
-    run = 1  # 1 is for First Step and 2 for Second Step
+    run = 2  # 1 is for First Step and 2 for Second Step
     # Load Data from Pickles
     load(data)
 
     if run == 1:
         # Random Search Cross Validation
         rscv(data)
-        fit(data) # Only run in First Step when Results from run 2 are worse than run 1
+        fit(data)  # Only run in First Step when Results from run 2 are worse than run 1
     elif run == 2:
         # Grid Search Cross Validation
         gscv(data)

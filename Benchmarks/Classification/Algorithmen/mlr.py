@@ -12,6 +12,8 @@ import pandas as pd
 
 ########################################################################################################################
 # Multinomial Logistic Regression
+# Reference:
+# https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
 ########################################################################################################################
 def load(values):
     # Load the Data we created in feature.py
