@@ -1,9 +1,6 @@
 import pickle
 import pandas as pd
-import nltk
 from nltk.corpus import stopwords
-nltk.download('wordnet')
-nltk.download('omw-1.4')
 import spacy
 import lemminflect
 lem_model = spacy.load("en_core_web_trf")

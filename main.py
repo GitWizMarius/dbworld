@@ -21,15 +21,11 @@ def main():
     classification = True  # Classification of Mails (True/False)
 
     # Export-Settings ====
-    js = False  # Export as json (True/False)
-    database = False  # Export/Write to Database (True/False)
+    js = False  # Export as json (True/False) (NOT IMPLEMENTED)
+    database = True  # Export/Write to Database (True/False)
     if database:
         db.connect()
 
-    # Other Variables
-    single_keywords = None
-    multiple_keywords = None
-    results = df = pd.DataFrame()
 
     # Import DataSet and preprocess
     dataset = init.import_data()
@@ -51,14 +47,13 @@ def main():
 
         if classification:
             label, probability = classif.predict(dataset.loc[i, "Subject"])
-            print('Label = {} AND Probability = {}'.format(label, probability))
+            #print('Label = {} AND Probability = {}'.format(label, probability))
 
             # If the probability is lower than 70%, label it as other
             if probability < 70:
                 label = 'Other'
 
-        # Todo: Write all to DataBase after element was processed
-        # Todo: Implement all needed Functions
+        # Todo: Check for Functionality
         if database:
             doubled = db.check_double(dataset.loc[i, "Subject"])
             # Write Mail to DB
