@@ -48,7 +48,6 @@ def main():
         if classification:
             label, probability = classif.predict(dataset.loc[i, "Subject"])
             #print('Label = {} AND Probability = {}'.format(label, probability))
-
             # If the probability is lower than 70%, label it as other
             if probability < 70:
                 label = 'Other'
@@ -57,11 +56,10 @@ def main():
         if database:
             doubled = db.check_double(dataset.loc[i, "Subject"])
             # Write Mail to DB
-            # Todo: Remove Test Variable (Marius Armbruster - Test)
             while True:
-                mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], 'Marius Armbruster - Test',
-                                         dataset.loc[i, "From_Mail"],
-                                         dataset.loc[i, "Subject"], dataset.loc[i, "Body"], number_of_words)
+                mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], dataset.loc[i, "Date_Sent"],
+                                         dataset.loc[i, "From_Name"], dataset.loc[i, "From_Mail"],
+                                         dataset.loc[i, "Subject"], dataset.loc[i, "Body"], dataset.loc[i, "Body_HTML"], number_of_words)
                 mail_id -= 1
                 if mail_id == 0:
                     print('Mail ID is ZERO')

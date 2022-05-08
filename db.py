@@ -60,13 +60,13 @@ def old_insert_allmails(df):
         print(df.loc[i, "Subject"] + " was written to the DB")
 
 
-def insert_mail(date_received, from_name, from_mail, subject, body, wordcount):
+def insert_mail(date_received, date_sent, from_name, from_mail, subject, body, body_html, wordcount):
     """print("Insert Single Mail")"""
-    query = "INSERT INTO maildatasettable (date_received, from_name, from_mail, subject, body, wordcount) values(%s,%s,%s,%s,%s,%s) RETURNING id;"
+    query = "INSERT INTO maildatasettable (date_received, date_sent, from_name, from_mail, subject, body, body_html, wordcount) values(%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"
 
     """ Execute a single INSERT request and return ID """
     try:
-        cur.execute(query, (date_received, from_name, from_mail, subject, body, wordcount))
+        cur.execute(query, (date_received, date_sent, from_name, from_mail, subject, body, body_html, wordcount))
         conn.commit()
         id_of_new_row = cur.fetchone()[0]
 
