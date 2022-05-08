@@ -1,6 +1,6 @@
 # DBWorld Studienarbeit - Python Code
 
-Autor: Marius Armbruster
+Code written by: Marius Armbruster
 
 Betreuer: Prof. Dr.-Ing. Olaf Herden
 
@@ -38,8 +38,10 @@ Eigener db-World Mail Datensatz nutzen?
 - Öffnen Sie die Konsole und navigieren Sie in das Repository
 - Befehl: 'python3 main.py'
 - Das Skript wird automatisch ausgeführt
-- Nun sollte sich eine GUI öffnen, anhand welcher die .csv Datei ausgewählt werden kann
-- Danach sollte in der Konsole mehrere Informationen ausgegeben werden sowie eine Statusleiste zur aktuellen Bearbeitungszeit/fortschritt
+- Nun sollte sich eine GUI öffnen, anhand welcher die .csv Datei ausgewählt werden kann.
+  - Anmerkung: Der erste Start des Skripts kann länger dauern, da einige benötigte Datein heruntergeladen werden. Sollte in der Konsole länger keine neue Meldung kommen, so starten Sie das Skript neu und warten bis die GUI kommt (ggf. in dieser Zeit nichts anderes anklicken, dies führte in selten Fällen zum nicht öffnen des Fensters)
+- Danach sollte in der Konsole mehrere Informationen ausgegeben werden sowie eine Statusleiste zur aktuellen Bearbeitungszeit/Fortschritt
+- Wichtig: Die Konsolen gibt lediglich eine Statusanzeige aus. Alle Konsolen Ausgaben in Form von print Befehlen wurden auskommentiert bzw. gelöscht, da nicht notwendig bzw. teils unübersichtlich.
 
 ## 1.5 Nutzen der Benchmarks
 [tbd]
