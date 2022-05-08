@@ -5,6 +5,7 @@ import pandas as pd
 from tqdm import tqdm
 import json
 # Import own .py files
+import classif
 import db
 import init
 import kword
@@ -17,11 +18,11 @@ def main():
     lemmatize = True  # Lemmatize Single Keywords (True/False)
 
     # Classification-Settings ====
-    classification = False  # Classification of Mails (True/False)
+    classification = True  # Classification of Mails (True/False)
 
     # Export-Settings ====
     js = False  # Export as json (True/False)
-    database = True  # Export/Write to Database (True/False)
+    database = False  # Export/Write to Database (True/False)
     if database:
         db.connect()
 
@@ -49,15 +50,21 @@ def main():
             # print('========================================================')
 
         if classification:
-            print('Mail Classification /tbd')
+            label, probability = classif.predict(dataset.loc[i, "Subject"])
+            print('Label = {} AND Probability = {}'.format(label, probability))
+
+            # If the probability is lower than 70%, label it as other
+            if probability < 70:
+                label = 'Other'
 
         # Todo: Write all to DataBase after element was processed
         # Todo: Implement all needed Functions
         if database:
             doubled = db.check_double(dataset.loc[i, "Subject"])
             # Write Mail to DB
+            # Todo: Remove Test Variable (Marius Armbruster - Test)
             while True:
-                mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], dataset.loc[i, "From_Name"],
+                mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], 'Marius Armbruster - Test',
                                          dataset.loc[i, "From_Mail"],
                                          dataset.loc[i, "Subject"], dataset.loc[i, "Body"], number_of_words)
                 mail_id -= 1
@@ -72,7 +79,7 @@ def main():
                 db.insert_multiplekeyword(multiple, mail_id, doubled)
             # Write Classification to DB
             if classification:
-                print('Write to Database')
+                db.insert_classification(label, mail_id)
 
         # Todo: Implement JSON Export containing all values
         # -> Late Project Stage if Time
