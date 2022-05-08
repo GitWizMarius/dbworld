@@ -125,3 +125,15 @@ def check_double(text):
         return 1
 
     return exists
+
+
+def insert_classification(mail_id, label):
+    query = "UPDATE maildatasettable SET classification = '{}' WHERE id = {}".format(label, mail_id)
+    try:
+        cur.execute(query)
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        conn.rollback()
+        cur.close()
+        return 1
