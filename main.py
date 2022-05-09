@@ -46,7 +46,8 @@ def main():
             # print('========================================================')
 
         if classification:
-            label, probability = classif.predict(dataset.loc[i, "Subject"])
+            predict_text = dataset.loc[i, "Subject"]
+            label, probability = classif.predict(predict_text)
             #print('Label = {} AND Probability = {}'.format(label, probability))
             # If the probability is lower than 70%, label it as other
             if probability < 70:
