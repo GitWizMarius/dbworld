@@ -55,7 +55,8 @@ def main():
 
         # Todo: Check for Functionality
         if database:
-            doubled = db.check_double(dataset.loc[i, "Subject"])
+            doubled_text = dataset.loc[i, "Subject"]
+            doubled = db.check_double(doubled_text )
             # Write Mail to DB
             while True:
                 mail_id = db.insert_mail(dataset.loc[i, "Date_Received"], dataset.loc[i, "Date_Sent"],
