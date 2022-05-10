@@ -19,6 +19,7 @@ def preprocess(df):
     # Changing Data Types
     df = df.convert_dtypes()
     df['Date_Received'] = pd.to_datetime(df['Date_Received'], dayfirst=True)
+    df['Date_Sent'] = pd.to_datetime(df['Date_Sent'], dayfirst=True)
     df = df.sort_values(by='Date_Received', ascending=False)
     df = df.reset_index(drop=True)
 
