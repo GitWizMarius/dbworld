@@ -18,6 +18,7 @@ nlp = spacy.load('en_core_web_sm')
 
 import pandas as pd
 
+# Based on: https://towardsdatascience.com/keyword-extraction-a-benchmark-of-7-algorithms-in-python-8a905326d93f by Andrea D'Agostino
 
 # initiate BERT outside of functions
 # 2 different Versions

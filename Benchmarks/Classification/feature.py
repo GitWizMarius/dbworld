@@ -1,8 +1,5 @@
 import pickle
-import pandas as pd
-import re
 import nltk
-import openpyxl
 
 # Downloading the stop words list
 nltk.download('stopwords')
@@ -10,15 +7,13 @@ import spacy
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.feature_selection import chi2
-import numpy as np
 # lemminflect shows as unused but needs to be imported!
 import lemminflect
 
 ########################################################################################################################
 # Settings
 lemmatize = True
-#values = 'Body'  # 'Subject' or 'Body' or 'Both' -> Select which Column to use for the feature extraction
+# values = 'Body'  # 'Subject' or 'Body' or 'Both' -> Select which Column to use for the feature extraction
 representation = 1  # 1 = TF-IDF, 2 = XXX -> Todo: Implement other Text Representation Methods if Time is enough
 
 ####################################################################################################################
@@ -30,6 +25,8 @@ print('DataSet imported with following DataTypes:')
 print(dataset.dtypes)
 print(dataset.head())
 print('========================================================')
+
+
 ####################################################################################################################
 
 
@@ -43,7 +40,6 @@ def main(values, df):
     df[values] = df[values].str.replace("'s", "")
     # Text to Lowercase so "Yolo" and "yolo" are the same
     df[values] = df[values].str.lower()
-
 
     # Lemmatization der Bodys mit Spacy und Lemminflect
     if lemmatize:
@@ -144,6 +140,7 @@ def main(values, df):
         pickle.dump(df, output)
 
     print('Set with {} is done'.format(values))
+
 
 if __name__ == '__main__':
     # Features for Subject, Body and Both
