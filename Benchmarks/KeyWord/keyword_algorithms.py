@@ -17,7 +17,7 @@ import spacy
 nlp = spacy.load('en_core_web_sm')
 
 import pandas as pd
-
+import yaml
 # Based on: https://towardsdatascience.com/keyword-extraction-a-benchmark-of-7-algorithms-in-python-8a905326d93f by Andrea D'Agostino
 
 # initiate BERT outside of functions
@@ -33,9 +33,9 @@ def rake_extractor(text):
     Arguments: text (str)
     Returns: list of keywords (list)
     """
-    r = Rake()
+    r = Rake(max_length=4)
     r.extract_keywords_from_text(text)
-    return r.get_ranked_phrases()[:100]
+    return r.get_ranked_phrases()[:10]
 
 
 # 2. YAKE
@@ -44,7 +44,7 @@ def yake_extractor(text):
     Arguments: text (str)
     Returns: list of keywords (list)
     """
-    keywords = yake.KeywordExtractor(lan="en", n=3, windowsSize=3, top=100).extract_keywords(text)
+    keywords = yake.KeywordExtractor(lan="en", n=3, windowsSize=3, top=10).extract_keywords(text)
     results = []
     for scored_keywords in keywords:
         for keyword in scored_keywords:
@@ -63,7 +63,7 @@ def position_rank_extractor(text):
     pos = {'NOUN', 'PROPN', 'ADJ', 'ADV'}
     extractor = pke.unsupervised.PositionRank()
     extractor.load_document(text, language='en')
-    extractor.candidate_selection(pos=pos, maximum_word_number=100)
+    extractor.candidate_selection(maximum_word_number=10)
     # 4. weight the candidates using the sum of their word's scores that are
     #    computed using random walk biaised with the position of the words
     #    in the document. In the graph, nodes are words (nouns and
@@ -71,7 +71,7 @@ def position_rank_extractor(text):
     #    3 words.
     extractor.candidate_weighting(window=3, pos=pos)
     # 5. get the 5-highest scored candidates as keyphrases
-    keyphrases = extractor.get_n_best(n=100)
+    keyphrases = extractor.get_n_best(n=10)
     results = []
     for scored_keywords in keyphrases:
         for keyword in scored_keywords:
@@ -91,7 +91,7 @@ def single_rank_extractor(text):
     extractor.load_document(text, language='en')
     extractor.candidate_selection(pos=pos)
     extractor.candidate_weighting(window=3, pos=pos)
-    keyphrases = extractor.get_n_best(n=100)
+    keyphrases = extractor.get_n_best(n=10)
     results = []
     for scored_keywords in keyphrases:
         for keyword in scored_keywords:
@@ -114,7 +114,7 @@ def multipartite_rank_extractor(text):
     #    alpha controls the weight adjustment mechanism, see TopicRank for
     #    threshold/method parameters.
     extractor.candidate_weighting(alpha=1.1, threshold=0.74, method='average')
-    keyphrases = extractor.get_n_best(n=100)
+    keyphrases = extractor.get_n_best(n=10)
     results = []
     for scored_keywords in keyphrases:
         for keyword in scored_keywords:
@@ -134,7 +134,7 @@ def topic_rank_extractor(text):
     pos = {'NOUN', 'PROPN', 'ADJ', 'ADV'}
     extractor.candidate_selection(pos=pos)
     extractor.candidate_weighting()
-    keyphrases = extractor.get_n_best(n=100)
+    keyphrases = extractor.get_n_best(n=10)
     results = []
     for scored_keywords in keyphrases:
         for keyword in scored_keywords:
@@ -149,7 +149,7 @@ def keybert_extractor(text):
     Arguments: text (str)
     Returns: list of keywords (list)
     """
-    keywords = bert.extract_keywords(text, keyphrase_ngram_range=(3, 5), stop_words="english", top_n=100)
+    keywords = bert.extract_keywords(text, keyphrase_ngram_range=(1, 3), stop_words="english", top_n=10)
     results = []
     for scored_keywords in keywords:
         for keyword in scored_keywords:
@@ -242,7 +242,7 @@ def benchmark(corpus, shuffle=True):
     for extractor in extractors:
         result = extract_keywords_from_corpus(extractor, corpus)
         results.append(result)
-    print(results)
+    print(yaml.dump(results, default_flow_style=False))
 
     # compute average number of extracted keywords
     for result in results:

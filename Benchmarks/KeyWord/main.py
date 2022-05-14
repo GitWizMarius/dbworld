@@ -36,17 +36,17 @@ DataSet, Base_Text = process.import_data()
 
 def main():
     # n is how many mails should be used from the DataSet
-    n = 10
+    n = 3
     # Import DataSet and preprocess
     DataSet, Base_Text = process.import_data()
 
     print(DataSet.dtypes)
     print(Base_Text[:n])
 
-    '''Text_Clean = Base_Text[:n].apply(lambda x: process.preprocess(x, r_stopwords=True))
-    print(Text_Clean)'''
+    Text_Clean = Base_Text[:n].apply(lambda x: process.preprocess(x, r_stopwords=False))
+    print(Text_Clean)
 
-    results = keyword_algorithms.benchmark(Base_Text[:n], shuffle=True)
+    results = keyword_algorithms.benchmark(Text_Clean[:n], shuffle=True)
 
 
 if __name__ == "__main__":

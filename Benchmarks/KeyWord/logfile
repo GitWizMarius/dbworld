@@ -1,0 +1,278 @@
+.CSV Import was successfully
+.CSV Import was successfully
+Date_Received    datetime64[ns]
+Date_Sent        datetime64[ns]
+From_Name                string
+From_Mail                string
+Subject                  string
+Body                     string
+Body_HTML                string
+dtype: object
+0    ISMIS 2022 (Industry Track): Call for Papers==...
+1    Call for Papers VIPERC2022====================...
+2    IEEE ICDE 2023 CALL FOR RESEARCH PAPERSIEEE IC...
+dtype: string
+0    ismis industry track call for papers ismis ind...
+1    call for papers viperc viperc st international...
+2    ieee icde call for research papersieee icde ca...
+dtype: object
+- algorithm: rake_extractor
+  corpus_kws:
+    0:
+    - semistructured data information integration
+    - edge computing data visualization
+    - multimedia databases uncertain probabilistic
+    - round involving two rounds
+    - th ieee international conference
+    - research papersieee icde call
+    - ieee icde call
+    - data engineering icde
+    - least two weeks
+    - revisions notification dates
+    1:
+    - various intelligent methods algorithms
+    - luciano caroprese icar cnr
+    - submit original unpublished papers
+    - session submission guidelines authors
+    - ismis industry track call
+    - demonstrate current research
+    - address practical problems
+    - practical implementations related
+    - innovative architectures tools
+    - unsubscribe directions given
+    2:
+    - viper conference gmail com
+    - least two independent reviewers
+    - cultural heritage understanding aims
+    - cultural heritage submission guidelines
+    - cultural heritage knowledge representation
+    - cultural heritage items classification
+    - st international virtual conference
+    - cultural heritage intelligent systems
+    - historical data computer vision
+    - visual pattern extraction analysis
+  elapsed_time: 00:00:00
+- algorithm: yake_extractor
+  corpus_kws:
+    0:
+    - authors accept reject
+    - authors accept revise
+    - accept revise reject
+    - ready copy due
+    - camera ready copy
+    - october saturday notification
+    - round submission due
+    - due october saturday
+    - thursday revisions due
+    - california irvine usa
+    1:
+    - ismis industry track
+    - luciano caroprese icar
+    - caroprese icar cnr
+    - bioinformatics mobile applications
+    - systems medical applications
+    - networks medical applications
+    - chairs luciano caroprese
+    - icar cnr italy
+    - management systems medical
+    - bioinformatics recommendation systems
+    2:
+    - cultural heritage multimedia
+    - visual pattern extraction
+    - heritage multimedia data
+    - cultural heritage understanding
+    - annunzio chieti pescara
+    - ancient multimedia data
+    - international virtual conference
+    - chieti pescara italy
+    - cultural heritage
+    - cultural heritage submission
+  elapsed_time: 00:00:00
+- algorithm: topic_rank_extractor
+  corpus_kws:
+    0:
+    - database systems
+    - submission
+    - anaheim california usa
+    - data mining
+    - areas
+    - rounds
+    - privacy database technology
+    - authors
+    - original research contributions
+    - interest
+    1:
+    - applications
+    - original unpublished papers
+    - papers ismis industry
+    - session
+    - practical problems
+    - researchers
+    - industry practitioners submissions
+    - tools
+    - interest
+    - exchange
+    2:
+    - cultural heritage
+    - visual pattern extraction
+    - recognition
+    - submissions
+    - data science
+    - modelling
+    - machine
+    - simulation
+    - dblp topics topics
+    - virtual reality systems
+  elapsed_time: 00:00:01
+- algorithm: position_rank_extractor
+  corpus_kws:
+    0:
+    - knowledge discovery data models semantics query languages data stream systems
+    - data quality iot data management
+    - data engineering icde
+    - important dates ieee
+    - interactive data exploration database security
+    - th ieee
+    - p data management explainability fairness
+    - database research community
+    - research paper submissions
+    - scientific data management
+    1:
+    - ismis industry track pc topics topics
+    - ismis industry track call
+    - papers ismis industry
+    - industry track
+    - industry practitioners submissions
+    - industry
+    - intelligent information systems
+    - original unpublished papers
+    - exploratory data analysis knowledge discovery
+    - interest papers
+    2:
+    - papers viperc viperc st
+    - september conference website submission link submission deadline
+    - cultural heritage multimedia data signal processing
+    - international virtual conference
+    - cultural heritage multimedia data graph
+    - cultural heritage multimedia data
+    - cultural heritage images data mining
+    - cultural heritage submission guidelines
+    - cultural heritage multimedia collections
+    - cultural heritage image processing texture
+  elapsed_time: 00:00:01
+- algorithm: single_rank_extractor
+  corpus_kws:
+    0:
+    - knowledge discovery data models semantics query languages data stream systems
+    - reject november tuesday camera ready copy due november monday third round submission
+      due october saturday notification
+    - reject august thursday camera ready copy due september wednesday second round
+      submission due july friday notification
+    - data quality iot data management modern hardware
+    - approximate databases very large data science applications pipelines
+    - revise reject june saturday revisions due july monday final notification
+    - revise reject september thursday revisions due october saturday notification
+    - interactive data exploration database security
+    - revise reject december thursday revisions due january sunday notification
+    - pm pst first round submission due april monday notification
+    1:
+    - bioinformatics recommendation systems spatial data analysis web technologies
+      industry track co chairs luciano caroprese icar cnr italy fabio fumarola prometeia
+      spa italy contact
+    - intelligent systems industry track cosenza italy october conference website
+      submission link submission deadline
+    - ismis industry track pc topics topics
+    - data mining knowledge visualization social networks medical applications
+    - intelligent information systems big data cloud
+    - ismis industry track call
+    - knowledge management systems medical applications
+    - exploratory data analysis knowledge discovery
+    - industry practitioners submissions
+    - industry track
+    2:
+    - ancient multimedia data general chairs alessia amelio university g d annunzio
+      chieti pescara italy
+    - cultural heritage multimedia data natural language processing
+    - cultural heritage multimedia data signal processing
+    - cultural heritage multimedia collections industrial products projects prototypes
+    - cultural heritage multimedia data graph
+    - montelpare university g d annunzio chieti pescara italy domenico ursino marche
+      polytechnic university italy contact
+    - cultural heritage images data mining
+    - cultural heritage image processing texture
+    - cultural heritage intelligent systems
+    - cultural heritage submission guidelines
+  elapsed_time: 00:00:01
+- algorithm: multipartite_rank_extractor
+  corpus_kws:
+    0:
+    - database systems
+    - submission
+    - anaheim california usa
+    - data mining
+    - areas
+    - cloud data management
+    - original research contributions
+    - week
+    - interest
+    - privacy database technology
+    1:
+    - papers ismis industry
+    - applications
+    - researchers
+    - original unpublished papers
+    - international symposium
+    - tools
+    - practical problems
+    - session
+    - industry practitioners submissions
+    - big data
+    2:
+    - cultural heritage
+    - recognition
+    - visual pattern extraction
+    - submissions
+    - machine
+    - modelling
+    - st international virtual conference
+    - data science
+    - advanced statistics
+    - cultural heritage understanding
+  elapsed_time: 00:00:01
+- algorithm: keybert_extractor
+  corpus_kws:
+    0:
+    - data engineering icde
+    - ieee icde research
+    - ieee icde
+    - conference data engineering
+    - icde research papersieee
+    - icde research
+    - icde rounds research
+    - dates ieee icde
+    - icde research papers
+    - data management welcome
+    1:
+    - big data industry
+    - intelligent systems industry
+    - following applications intelligent
+    - systems big data
+    - big data cloud
+    - data industry
+    - applications various intelligent
+    - intelligence big data
+    - data industry aim
+    - big data
+    2:
+    - heritage image processing
+    - segmentation cultural heritage
+    - cultural heritage images
+    - processing cultural heritage
+    - heritage images data
+    - recognition cultural heritage
+    - extraction cultural heritage
+    - heritage multimedia data
+    - extraction recognition cultural
+    - cultural heritage multimedia
+  elapsed_time: 00:00:01
+
