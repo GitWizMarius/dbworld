@@ -68,7 +68,7 @@ Python Version: 3.8
 - Downloaden und entpacken Sie das Repository
 - Navigieren Sie in das entpackte Repository und öffnen sie eine Konsole
 - Installieren Sie anhand des Befehls 'pip install -r requirements.txt' die benötigten Pakete
-- Manuelle installation von PKE -> sie benötigen dazu 'git' (https://git-scm.com/downloads)
+- Manuelle installation von PKE -> sie benötigen dazu 'git' (https://git-scm.com/downloads) ! Nur für Keyword Benchmark benötigt !
   - Befehl: 'pip install git+https://github.com/boudinfl/pke.git'
 
 ## 2.2. Datenbank Verbindung
