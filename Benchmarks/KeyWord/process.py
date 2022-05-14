@@ -18,12 +18,18 @@ def import_data():
     try:
         # File Import with UTF8 encoding throws an Error
         df = pd.read_csv(filepath, encoding='ISO-8859-1', parse_dates=True)
-        df = df.rename(columns={'Date Received': 'Date_Received', 'Sent on behalf of (display)': 'From_Name',
-                                'Sent on behalf of (address)': 'From_Mail'})
+        df = df.rename(columns={'Date Received': 'Date_Received',
+                                'Date Sent': 'Date_Sent',
+                                'Sent on behalf of (display)': 'From_Name',
+                                'Sent on behalf of (address)': 'From_Mail',
+                                'Body HTML': 'Body_HTML'})
         df['Subject'] = df['Subject'].str[10:]
+        df['Subject'] = df['Subject'].str.replace("'", "")
+        df['Subject'] = df['Subject'].str.replace('"', '')
         # Changing Data Types
         df = df.convert_dtypes()
         df['Date_Received'] = pd.to_datetime(df['Date_Received'], dayfirst=True)
+        df['Date_Sent'] = pd.to_datetime(df['Date_Sent'], dayfirst=True)
         df = df.sort_values(by='Date_Received', ascending=False)
         df = df.reset_index(drop=True)
         df = df.fillna("Ops, something seems to be wrong here.")
