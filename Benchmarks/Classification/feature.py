@@ -37,7 +37,6 @@ def main(values, df):
     # 1. Data Cleansing and Preprocessing
     df[values] = df[values].str.replace(r"http\S+", " ")
     df[values] = df[values].str.replace("[^A-Za-z]+", " ")
-    df[values] = df[values].str.replace("'s", "")
     # Text to Lowercase so "Yolo" and "yolo" are the same
     df[values] = df[values].str.lower()
 
