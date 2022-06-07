@@ -59,7 +59,7 @@ pandas==1.4.2
 parso==0.8.3
 pathy==0.6.1
 pickleshare==0.7.5
-Pillow==9.1.0
+Pillow==9.1.1
 pke @ git+https://github.com/boudinfl/pke.git@a262f98e0669af96df47eedc6fedb5a0d6ecaf80
 plotly==5.8.0
 preshed==3.0.6
