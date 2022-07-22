@@ -1,1 +1,8 @@
 # Following will clarify how to correctly use the classification Benchmark
+
+1. feature.py ausführen mit gewünschtem Datensatz (muss händische Klassifikation beinhalten)
+2. In Ordner "Algorithmen" navigieren
+3. Jeweilige .py Dateien der Algos einzeln ausführen (jedes mal 2 mal mit händischem anpassen der Parameter)
+4. Nachdem alle ausgeführt wurden -> evaluate.py ausführen bezgl. der Ergebnisse
+
+Confusion Matrixen werden automatisch erstellt und gespeichert, sobald Algorithmus ausgeführt wird. Die jeweiligen Models und zusätzlichen Dateien werden als .pickle gespeichert.
