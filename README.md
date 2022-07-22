@@ -86,7 +86,7 @@ Für den Datenimport wird eine .csv Datei benötigt, welche einen Export der Mai
 Bei dem Export der Mail handelt es sich dabei um einen Outlook-Export mit unten aufgelisteten Attributen.
 Dieser Datensatz ist aus Speichertechnischen Gründen nicht in dem Repository zu finden. 
 
-Download über: [tbd]
+Download über: (DHBW Intern Hochgeladen)
 
 Eigener db-World Mail Datensatz nutzen? 
 - Outlook Downloaden
